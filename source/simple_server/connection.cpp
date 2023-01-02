@@ -25,14 +25,11 @@ int Connection::Recv() {
         perror("Connection is not connected, can not read");
         return -1;
     }
-    if (sock->IsNonBlocking()) {
-        return ReadNonBlocking();
-    } else {
-        return ReadBlocking();
-    }
+    return ReadNonBlocking();
 }
 
-int Connection::Write() {
+int Connection::Send(std::string msg) {
+    SetSendBuf(msg.c_str());
     if (state != State::Connected) {
         perror("Connection is not connected, can not write");
         return -1;
@@ -93,43 +90,6 @@ int Connection::WriteNonBlocking() {
     return 0;
 }
 
-int Connection::ReadBlocking() {
-    int sockfd = sock->GetFd();
-    // unsigned int rcv_size = 0;
-    // socklen_t len = sizeof(rcv_size);
-    // getsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &rcv_size, &len);
-    size_t data_size = sock->RecvBufSize();
-    char buf[1024];
-    ssize_t bytes_read = read(sockfd, buf, sizeof(buf));
-    if (bytes_read > 0) {
-        read_buf->Append(buf, bytes_read);
-    } else if (bytes_read == 0) {
-        printf("read EOF, blocking client fd %d disconnected\n", sockfd);
-        state = State::Closed;
-    } else if (bytes_read == -1) {
-        printf("Other error on blocking client fd %d\n", sockfd);
-        state = State::Closed;
-    }
-    return 0;
-}
-
-int Connection::WriteBlocking() {
-    // 没有处理send_buffer_数据大于TCP写缓冲区，的情况，可能会有bug
-    int sockfd = sock->GetFd();
-    ssize_t bytes_write = write(sockfd, send_buf->GetBuf().c_str(), send_buf->Size());
-    if (bytes_write == -1) {
-        printf("Other error on blocking client fd %d\n", sockfd);
-        state = State::Closed;
-    }
-    return 0;
-}
-
-int Connection::Send(std::string msg) {
-    SetSendBuf(msg.c_str());
-    Write();
-    return 0;
-}
-
 void Connection::Business() {
     if(Recv() < 0){  // disconnected
         Close();
@@ -170,6 +130,10 @@ void Connection::SetOnSend(std::function<void(Connection *)> const &func) {
     on_send = std::move(func);
 }
 
+void Connection::SetSendBuf(const char *str) { 
+    send_buf->SetBuf(str); 
+}
+
 void Connection::Close() { 
     state = State::Closed;
     delete_connectioin(sock->GetFd()); 
@@ -179,18 +143,14 @@ Connection::State Connection::GetState() const {
     return state; 
 }
 
-Socket *Connection::socket() const { 
+Socket *Connection::GetSocket() const { 
     return sock.get(); 
 }
 
-void Connection::SetSendBuf(const char *str) { 
-    send_buf->SetBuf(str); 
-}
-
-Buffer *Connection::ReadBuf() { 
+Buffer *Connection::GetReadBuf() { 
     return read_buf.get(); 
 }
 
-Buffer *Connection::SendBuf() { 
+Buffer *Connection::GetSendBuf() { 
     return send_buf.get(); 
 }

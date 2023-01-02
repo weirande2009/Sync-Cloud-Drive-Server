@@ -23,14 +23,14 @@ public:
     void SetDeleteConnection(std::function<void(int)> const &func);
     void SetOnRecv(std::function<void(Connection *)> const &func);
     void SetOnSend(std::function<void(Connection *)> const &func);
-    State GetState() const;
-    Socket *socket() const;
     void SetSendBuf(const char *str);
-    Buffer *ReadBuf();
-    Buffer *SendBuf();
+
+    State GetState() const;
+    Socket* GetSocket() const;
+    Buffer* GetReadBuf();
+    Buffer* GetSendBuf();
 
     int Recv();
-    int Write();
     int Send(std::string msg);
 
     void Close();
@@ -39,8 +39,6 @@ private:
     void Business();
     int ReadNonBlocking();
     int WriteNonBlocking();
-    int ReadBlocking();
-    int WriteBlocking();
 
     std::unique_ptr<Socket> sock;
     std::unique_ptr<Channel> channel;
