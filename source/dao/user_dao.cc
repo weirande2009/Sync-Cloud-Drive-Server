@@ -4,10 +4,6 @@ UserDao::UserDao(): Dao(){
     
 }
 
-UserDao::UserDao(Database::ClientType client_type): Dao(client_type){
-    
-}
-
 /**
  * Generate a doc object for class User
  * @return a doc object

@@ -4,10 +4,6 @@ FileDao::FileDao(): Dao(){
     
 }
 
-FileDao::FileDao(Database::ClientType client_type): Dao(client_type){
-    
-}
-
 /**
  * Generate a view object for file
  * @return a view object

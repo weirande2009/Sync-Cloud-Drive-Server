@@ -4,10 +4,6 @@ TransmissionDao::TransmissionDao(): Dao(){
     
 }
 
-TransmissionDao::TransmissionDao(Database::ClientType client_type): Dao(client_type){
-    
-}
-
 /**
  * Generate a view object for transmission
  * @return a view object

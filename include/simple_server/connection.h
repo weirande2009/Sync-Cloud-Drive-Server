@@ -32,8 +32,9 @@ public:
 
     int Recv();
     int Send(std::string msg);
-
     void Close();
+
+    int GetReactorNo();
 
 private:
     void Business();
@@ -53,5 +54,7 @@ private:
 
     int read_length;
     int received_length;
+
+    int reactor_no;
 
 };

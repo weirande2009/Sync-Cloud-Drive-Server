@@ -9,7 +9,8 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <unordered_map>
+
+#include "utilities/database_common.h"
 
 static const char* DATABASE_CONNECTION_URI = "mongodb://admin:123456@127.0.0.1:27017/syncdrive";
 static const char* DATABASE_NAME = "syncdrive";
@@ -24,11 +25,6 @@ public:
         Transmission = 4,
     };
 
-    enum ClientType{
-        Main = 0,
-        Transmission = 1,
-    };
-
 private:
     static Database* instance;
     mongocxx::instance database_instance{}; // This should be done only once.
@@ -37,16 +33,15 @@ private:
           DATABASE_CONNECTION_URI
         }
     };
-    std::unordered_map<ClientType, mongocxx::client&> clients;
-    std::unordered_map<ClientType, mongocxx::database> dbs;
-    std::unordered_map<ClientType, std::unordered_map<CollectionType, mongocxx::collection>> collections;
-
+    std::unordered_map<CollectionType, std::string> collection_names;
+    
     Database();
 
 public:
 
     static Database* GetInstance();
-    mongocxx::collection GetCollection(ClientType client_type, CollectionType collection_type);
+    void Start(int client_num);
+    mongocxx::collection GetCollection(CollectionType collection_type);
     bool CreateEmptyFile(const std::string file_path, int size);
     bool CreateEmptyFile(const std::string file_path, const std::vector<char>& buffer);
 

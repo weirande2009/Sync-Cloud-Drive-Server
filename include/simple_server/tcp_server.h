@@ -9,6 +9,7 @@
 #include "simple_server/thread_pool.h"
 #include "simple_server/connection.h"
 #include "simple_server/reactor_pool.h"
+#include "utilities/database.h"
 
 class TcpServer {
 public:
@@ -17,12 +18,12 @@ public:
     ~TcpServer();
     void Start();
 
-    int NewConnection(int fd);
-    int DeleteConnection(int fd);
-
     void OnConnect(std::function<void(Connection *)> func);
+    void OnDelete(std::function<void(Connection *)> func);
     void OnRecv(std::function<void(Connection *)> func);
     void OnSend(std::function<void(Connection *)> func);
+
+    unsigned int GetReactorNum();
 
 private:
     unsigned int sub_reactor_num;
@@ -32,9 +33,13 @@ private:
     std::unique_ptr<ThreadPool> thread_pool;
 
     std::function<void(Connection *)> on_connect;
+    std::function<void(Connection *)> on_delete;
     std::function<void(Connection *)> on_recv;
     std::function<void(Connection *)> on_send;
 
 protected:
     std::unordered_map<int, std::unique_ptr<Connection>> connections;
+
+    int NewConnection(int fd);
+    int DeleteConnection(int fd);
 };

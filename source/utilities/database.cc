@@ -8,22 +8,21 @@ Database* Database::GetInstance(){
 }
 
 Database::Database(){
-    auto c_main = client_pool.acquire();
-    clients.insert(std::pair<ClientType, mongocxx::client&>(ClientType::Main, *c_main));
-    auto c_transmission = client_pool.acquire();
-    clients.insert(std::pair<ClientType, mongocxx::client&>(ClientType::Transmission, *c_main));
-    for(auto& p: clients){
-        dbs[p.first] = p.second[DATABASE_NAME];
-        collections[p.first][CollectionType::User] = dbs[p.first]["user"];
-        collections[p.first][CollectionType::Directory] = dbs[p.first]["directory"];
-        collections[p.first][CollectionType::File] = dbs[p.first]["file"];
-        collections[p.first][CollectionType::Filemd5] = dbs[p.first]["filemd5"];
-        collections[p.first][CollectionType::Transmission] = dbs[p.first]["transmission"];
-    }
+    
 }
 
-mongocxx::collection Database::GetCollection(ClientType client_type, CollectionType collection_type){
-    return collections[client_type][collection_type];
+void Database::Start(int client_num){
+    collection_names[CollectionType::User] = "user";
+    collection_names[CollectionType::Directory] = "directory";
+    collection_names[CollectionType::File] = "file";
+    collection_names[CollectionType::Filemd5] = "filemd5";
+    collection_names[CollectionType::Transmission] = "transmission";
+}
+
+
+mongocxx::collection Database::GetCollection(CollectionType collection_type){
+    auto client = client_pool.acquire();
+    return (*client)[DATABASE_NAME][collection_names[collection_type]];
 }
 
 bool Database::CreateEmptyFile(const std::string file_path, int size){

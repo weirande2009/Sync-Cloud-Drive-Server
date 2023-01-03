@@ -1,12 +1,7 @@
 #include "dao/dao.h"
 
 Dao::Dao(){
-
-}
-
-Dao::Dao(Database::ClientType client_type){
-    this->client_type = client_type;
-    this->collection = Database::GetInstance()->GetCollection(client_type, Database::CollectionType::User);
+    collection = Database::GetInstance()->GetCollection(Database::CollectionType::User);
 }
 
 /**

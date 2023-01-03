@@ -1,7 +1,8 @@
 #include "simple_server/event_loop.h"
 
-EventLoop::EventLoop() { 
+EventLoop::EventLoop(int no) { 
     poller = std::make_unique<Poller>(); 
+    this->no = no;
 }
 
 EventLoop::~EventLoop() {
@@ -23,3 +24,8 @@ void EventLoop::UpdateChannel(Channel *channel) const {
 void EventLoop::DeleteChannel(Channel *channel) const { 
     poller->DeleteChannel(channel); 
 }
+
+int EventLoop::GetNo(){
+    return no;
+}
+

@@ -2,7 +2,7 @@
 
 ReactorPool::ReactorPool(int num){
     for (size_t i = 0; i < num; ++i) {
-        std::unique_ptr<EventLoop> sub_reactor = std::make_unique<EventLoop>();
+        std::unique_ptr<EventLoop> sub_reactor = std::make_unique<EventLoop>(i+1);
         sub_reactors.push_back(std::move(sub_reactor));
     }
     connection_num = std::vector<int>(num, 0);

@@ -8,14 +8,17 @@
 class EventLoop {
 public:
     DISALLOW_COPY_AND_MOVE(EventLoop);
-    EventLoop();
+    EventLoop(int no);
     ~EventLoop();
 
 
     void Loop() const;
     void UpdateChannel(Channel *channel) const;
     void DeleteChannel(Channel *channel) const;
+    int GetNo();
 
 private:
     std::unique_ptr<Poller> poller;
+    int no;
+
 };

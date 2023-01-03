@@ -14,6 +14,8 @@ Connection::Connection(int fd, EventLoop *loop) {
     state = State::Connected;
     read_length = sizeof(TransmissionHeader);
     received_length = 0;
+
+    reactor_no = loop->GetNo();
 }
 
 Connection::~Connection() {
@@ -154,3 +156,8 @@ Buffer *Connection::GetReadBuf() {
 Buffer *Connection::GetSendBuf() { 
     return send_buf.get(); 
 }
+
+int Connection::GetReactorNo(){
+    return reactor_no;
+}
+

@@ -21,7 +21,6 @@ private:
 
 public:
     TransmissionDao();
-    TransmissionDao(Database::ClientType client_type);
 
     // get
     std::optional<Transmission> GetByFilemd5Id(const std::string& filemd5_id);

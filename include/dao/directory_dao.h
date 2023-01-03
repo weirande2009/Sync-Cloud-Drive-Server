@@ -21,7 +21,6 @@ private:
 
 public:
     DirectoryDao();
-    DirectoryDao(Database::ClientType client_type);
 
     // get
     std::optional<std::vector<Directory>> GetAllByUserId(const std::string& user_id);

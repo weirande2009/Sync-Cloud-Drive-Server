@@ -1,7 +1,7 @@
 #include "simple_server/tcp_server.h"
 
 TcpServer::TcpServer() {
-    main_reactor = std::make_unique<EventLoop>();
+    main_reactor = std::make_unique<EventLoop>(0);
     acceptor = std::make_unique<Acceptor>(main_reactor.get());
     std::function<void(int)> cb = std::bind(&TcpServer::NewConnection, this, std::placeholders::_1);
     acceptor->SetNewConnectionCallback(cb);
@@ -46,13 +46,20 @@ int TcpServer::DeleteConnection(int fd) {
     if( it == connections.end() ){
         return -1;
     }
+    if (on_delete) {
+        on_delete(connections[fd].get());
+    }
     connections.erase(fd);
-    reactor_pool.get()->RemoveConnection(fd);
+    reactor_pool->RemoveConnection(fd);
     return 0;
 }
 
 void TcpServer::OnConnect(std::function<void(Connection *)> func) { 
     on_connect = std::move(func); 
+}
+
+void TcpServer::OnDelete(std::function<void(Connection *)> func) { 
+    on_delete = std::move(func); 
 }
 
 void TcpServer::OnRecv(std::function<void(Connection *)> func) { 
@@ -62,3 +69,8 @@ void TcpServer::OnRecv(std::function<void(Connection *)> func) {
 void TcpServer::OnSend(std::function<void(Connection *)> func) { 
     on_send = std::move(func); 
 }
+
+unsigned int TcpServer::GetReactorNum(){
+    return sub_reactor_num+1;
+}
+

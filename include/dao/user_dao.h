@@ -21,7 +21,6 @@ private:
 
 public:
     UserDao();
-    UserDao(Database::ClientType client_type);
 
     // get
     std::optional<User> GetByName(const std::string& name);

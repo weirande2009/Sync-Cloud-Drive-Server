@@ -19,7 +19,6 @@ class Dao{
 private:
 
 protected:
-    Database::ClientType client_type;
     mongocxx::collection collection;
 
     template <class T1, class T2, class T3>
@@ -43,7 +42,6 @@ protected:
 
 public:
     Dao();
-    Dao(Database::ClientType client_type);
 
 };
 

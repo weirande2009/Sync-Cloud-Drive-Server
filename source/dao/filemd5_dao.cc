@@ -4,10 +4,6 @@ FileMd5Dao::FileMd5Dao(): Dao(){
     
 }
 
-FileMd5Dao::FileMd5Dao(Database::ClientType client_type): Dao(client_type){
-    
-}
-
 /**
  * Create a filemd5 directory with slides in disk
 */

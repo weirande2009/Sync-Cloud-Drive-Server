@@ -4,10 +4,6 @@ DirectoryDao::DirectoryDao(): Dao(){
     
 }
 
-DirectoryDao::DirectoryDao(Database::ClientType client_type): Dao(client_type){
-    
-}
-
 /**
  * Generate a view object for directory
  * @return a view object

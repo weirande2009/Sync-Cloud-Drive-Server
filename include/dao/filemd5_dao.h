@@ -30,7 +30,6 @@ private:
 
 public:
     FileMd5Dao();
-    FileMd5Dao(Database::ClientType client_type);
 
     // get
     std::optional<FileMD5> GetByMD5(const std::string& md5);

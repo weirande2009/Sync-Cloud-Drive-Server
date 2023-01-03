@@ -22,7 +22,6 @@ private:
 
 public:
     FileDao();
-    FileDao(Database::ClientType client_type);
 
     // get
     std::optional<std::vector<File>> GetAllByDirectoryId(const std::string& directory_id);
