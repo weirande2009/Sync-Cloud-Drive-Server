@@ -30,7 +30,7 @@ int Connection::Recv() {
     return ReadNonBlocking();
 }
 
-int Connection::Send(std::string msg) {
+int Connection::Send(const std::string& msg) {
     SetSendBuf(msg.c_str());
     if (state != State::Connected) {
         perror("Connection is not connected, can not write");

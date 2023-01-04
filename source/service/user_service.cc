@@ -51,3 +51,11 @@ bool UserService::ChangePassword(const std::string& id, const std::string& passw
 bool UserService::UpdateSyncDirectoryId(const std::string& id, const std::string& sync_directory_id){
     return user_dao.UpdateSyncDirectoryId(id, sync_directory_id);
 }
+
+/**
+ * Get the id of the name
+ * @return id
+*/
+std::optional<std::string> UserService::GetUserId(const std::string& name){
+    return user_dao.GetId(name);
+}

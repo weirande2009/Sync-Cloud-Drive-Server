@@ -13,6 +13,14 @@ std::optional<std::vector<File>> FileService::GetAllByDirectoryId(const std::str
 }
 
 /**
+ * Get all finished files by directory id
+ * @return a list of files
+*/
+std::optional<std::vector<File>> FileService::GetAllFinishedByDirectoryId(const std::string& directory_id){
+    return file_dao.GetAllFinishedByDirectoryId(directory_id);
+}
+
+/**
  * Add a new file
  * @return true: succeed, false: fail
 */

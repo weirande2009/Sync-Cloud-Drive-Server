@@ -25,6 +25,7 @@ public:
 
     // get
     std::optional<std::vector<File>> GetAllByDirectoryId(const std::string& directory_id);
+    std::optional<std::vector<File>> GetAllFinishedByDirectoryId(const std::string& directory_id);
     std::optional<std::vector<File>> GetAllByUserId(const std::string& user_id);
     std::optional<std::string> GetMd5ById(const std::string& id);
     std::optional<std::string> GetId(const std::string& name, const std::string& directory_id);

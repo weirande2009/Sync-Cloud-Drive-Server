@@ -13,6 +13,7 @@ public:
     FileService();
 
     std::optional<std::vector<File>> GetAllByDirectoryId(const std::string& directory_id);
+    std::optional<std::vector<File>> GetAllFinishedByDirectoryId(const std::string& directory_id);
     bool AddFile(const std::string& user_id, const std::string& name, const std::string& directory_id, const std::string& md5);
     bool UpdateFileState(const std::string& id, int state);
     bool RemoveFile(const std::string& id);

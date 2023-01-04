@@ -55,7 +55,17 @@ File FileDao::GenerateFileFromView(const bsoncxx::v_noabi::document::view& view)
  * @return an optional of File object
 */
 std::optional<std::vector<File>> FileDao::GetAllByDirectoryId(const std::string& directory_id){
-    return GetAll<File, bsoncxx::oid, FileDao>("directory_id", bsoncxx::oid(directory_id), FileDao::GenerateFileFromView);
+    return GetAll("directory_id", bsoncxx::oid(directory_id), FileDao::GenerateFileFromView);
+}
+
+/**
+ * Get a list of finished files from directory_id
+ * @return an optional of File object
+*/
+std::optional<std::vector<File>> FileDao::GetAllFinishedByDirectoryId(const std::string& directory_id){
+    std::vector<std::string> field_names = {"directory_id", "state"};
+    FieldValues field_values = {bsoncxx::oid(directory_id), 1};
+    return GetAll(field_names, field_values, FileDao::GenerateFileFromView);
 }
 
 /**
@@ -63,7 +73,7 @@ std::optional<std::vector<File>> FileDao::GetAllByDirectoryId(const std::string&
  * @return an optional of File object
 */
 std::optional<std::vector<File>> FileDao::GetAllByUserId(const std::string& user_id){
-    return GetAll<File, bsoncxx::oid, FileDao>("user_id", bsoncxx::oid(user_id), FileDao::GenerateFileFromView);
+    return GetAll("user_id", bsoncxx::oid(user_id), FileDao::GenerateFileFromView);
 }
 
 /**

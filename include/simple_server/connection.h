@@ -31,7 +31,7 @@ public:
     Buffer* GetSendBuf();
 
     int Recv();
-    int Send(std::string msg);
+    int Send(const std::string& msg);
     void Close();
 
     int GetReactorNo();

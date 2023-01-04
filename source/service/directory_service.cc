@@ -31,7 +31,7 @@ std::optional<DirectoryTree> DirectoryService::GetDirectoryTreeByUserId(const st
             if(d.is_root){
                 root.id = d.id;
                 root.name = d.name;
-                root.files = file_service.GetAllByDirectoryId(d.id).value();
+                root.files = file_service.GetAllFinishedByDirectoryId(d.id).value();
             }
             else{
                 id_directory_map[d.parent_id].push_back(d);

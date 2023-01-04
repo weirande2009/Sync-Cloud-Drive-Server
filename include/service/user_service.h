@@ -15,6 +15,7 @@ public:
     bool Register(const std::string& name, const std::string& password);
     bool ChangePassword(const std::string& id, const std::string& password);
     bool UpdateSyncDirectoryId(const std::string& id, const std::string& sync_directory_id);
+    std::optional<std::string> GetUserId(const std::string& name);
 
 };
 

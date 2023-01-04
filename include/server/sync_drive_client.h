@@ -5,7 +5,7 @@
 class SyncDriveClient{
 private:
     Connection* connection;
-
+    std::string user_id;
 
 
 public:
@@ -13,6 +13,7 @@ public:
     ~SyncDriveClient();
 
     Connection* GetConnection();
-
+    void SetUserId(const std::string& user_id);
+    const std::string& GetUserId();
 
 };
