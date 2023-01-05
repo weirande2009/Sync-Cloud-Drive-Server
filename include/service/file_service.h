@@ -18,6 +18,7 @@ public:
     bool UpdateFileState(const std::string& id, int state);
     bool RemoveFile(const std::string& id);
     bool UpdateFileName(const std::string& id, const std::string& name);
+    bool HasFile(const std::string& user_id, const std::string& name, const std::string& directory_id, const std::string& md5);
 
 };
 

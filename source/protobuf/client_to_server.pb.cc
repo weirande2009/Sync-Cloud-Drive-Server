@@ -194,6 +194,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_client_5fto_5fserver_2eproto::
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, md5_),
+  PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, name_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, size_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, parent_id_),
   ~0u,  // no _has_bits_
@@ -242,12 +243,12 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, sizeof(::SyncCloudDrive::CRegister)},
   { 7, -1, sizeof(::SyncCloudDrive::CLogin)},
   { 14, -1, sizeof(::SyncCloudDrive::CUploadFile)},
-  { 22, -1, sizeof(::SyncCloudDrive::CDownLoad)},
-  { 29, -1, sizeof(::SyncCloudDrive::CUploadData)},
-  { 37, -1, sizeof(::SyncCloudDrive::CDeleteFile)},
-  { 43, -1, sizeof(::SyncCloudDrive::CAddDirectory)},
-  { 50, -1, sizeof(::SyncCloudDrive::CDeleteDirectory)},
-  { 56, -1, sizeof(::SyncCloudDrive::CModifyUser)},
+  { 23, -1, sizeof(::SyncCloudDrive::CDownLoad)},
+  { 30, -1, sizeof(::SyncCloudDrive::CUploadData)},
+  { 38, -1, sizeof(::SyncCloudDrive::CDeleteFile)},
+  { 44, -1, sizeof(::SyncCloudDrive::CAddDirectory)},
+  { 51, -1, sizeof(::SyncCloudDrive::CDeleteDirectory)},
+  { 57, -1, sizeof(::SyncCloudDrive::CModifyUser)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -266,21 +267,21 @@ const char descriptor_table_protodef_client_5fto_5fserver_2eproto[] PROTOBUF_SEC
   "\n\026client_to_server.proto\022\016SyncCloudDrive"
   "\"/\n\tCRegister\022\014\n\004name\030\001 \001(\t\022\024\n\014password_"
   "md5\030\002 \001(\t\",\n\006CLogin\022\014\n\004name\030\001 \001(\t\022\024\n\014pas"
-  "sword_md5\030\002 \001(\t\";\n\013CUploadFile\022\013\n\003md5\030\001 "
-  "\001(\t\022\014\n\004size\030\002 \001(\005\022\021\n\tparent_id\030\003 \001(\t\".\n\t"
-  "CDownLoad\022\017\n\007file_id\030\001 \001(\t\022\020\n\010slide_no\030\002"
-  " \001(\005\":\n\013CUploadData\022\013\n\003md5\030\001 \001(\t\022\020\n\010slid"
-  "e_no\030\002 \001(\005\022\014\n\004data\030\003 \001(\t\"\036\n\013CDeleteFile\022"
-  "\017\n\007file_id\030\001 \001(\t\"0\n\rCAddDirectory\022\021\n\tpar"
-  "ent_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\"(\n\020CDeleteDir"
-  "ectory\022\024\n\014directory_id\030\001 \001(\t\",\n\013CModifyU"
-  "ser\022\014\n\004type\030\001 \001(\005\022\017\n\007content\030\002 \001(\t*\305\001\n\021C"
-  "lientCommandType\022\016\n\nC_REGISTER\020\000\022\013\n\007C_LO"
-  "GIN\020\001\022\n\n\006C_SYNC\020\002\022\021\n\rC_UPLOAD_FILE\020\003\022\016\n\n"
-  "C_DOWNLOAD\020\004\022\021\n\rC_UPLOAD_DATA\020\005\022\021\n\rC_DEL"
-  "ETE_FILE\020\006\022\023\n\017C_ADD_DIRECTORY\020\007\022\026\n\022C_DEL"
-  "ETE_DIRECTORY\020\010\022\021\n\rC_MODIFY_USER\020\tb\006prot"
-  "o3"
+  "sword_md5\030\002 \001(\t\"I\n\013CUploadFile\022\013\n\003md5\030\001 "
+  "\001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004size\030\003 \001(\005\022\021\n\tparen"
+  "t_id\030\004 \001(\t\".\n\tCDownLoad\022\017\n\007file_id\030\001 \001(\t"
+  "\022\020\n\010slide_no\030\002 \001(\005\":\n\013CUploadData\022\013\n\003md5"
+  "\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\022\014\n\004data\030\003 \001(\t\"\036"
+  "\n\013CDeleteFile\022\017\n\007file_id\030\001 \001(\t\"0\n\rCAddDi"
+  "rectory\022\021\n\tparent_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t"
+  "\"(\n\020CDeleteDirectory\022\024\n\014directory_id\030\001 \001"
+  "(\t\",\n\013CModifyUser\022\014\n\004type\030\001 \001(\005\022\017\n\007conte"
+  "nt\030\002 \001(\t*\305\001\n\021ClientCommandType\022\016\n\nC_REGI"
+  "STER\020\000\022\013\n\007C_LOGIN\020\001\022\n\n\006C_SYNC\020\002\022\021\n\rC_UPL"
+  "OAD_FILE\020\003\022\016\n\nC_DOWNLOAD\020\004\022\021\n\rC_UPLOAD_D"
+  "ATA\020\005\022\021\n\rC_DELETE_FILE\020\006\022\023\n\017C_ADD_DIRECT"
+  "ORY\020\007\022\026\n\022C_DELETE_DIRECTORY\020\010\022\021\n\rC_MODIF"
+  "Y_USER\020\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_client_5fto_5fserver_2eproto_deps[1] = {
 };
@@ -297,7 +298,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_cli
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_client_5fto_5fserver_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_client_5fto_5fserver_2eproto = {
-  false, false, descriptor_table_protodef_client_5fto_5fserver_2eproto, "client_to_server.proto", 682,
+  false, false, descriptor_table_protodef_client_5fto_5fserver_2eproto, "client_to_server.proto", 696,
   &descriptor_table_client_5fto_5fserver_2eproto_once, descriptor_table_client_5fto_5fserver_2eproto_sccs, descriptor_table_client_5fto_5fserver_2eproto_deps, 9, 0,
   schemas, file_default_instances, TableStruct_client_5fto_5fserver_2eproto::offsets,
   file_level_metadata_client_5fto_5fserver_2eproto, 9, file_level_enum_descriptors_client_5fto_5fserver_2eproto, file_level_service_descriptors_client_5fto_5fserver_2eproto,
@@ -837,6 +838,11 @@ CUploadFile::CUploadFile(const CUploadFile& from)
     md5_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_md5(), 
       GetArena());
   }
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_name().empty()) {
+    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+      GetArena());
+  }
   parent_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_parent_id().empty()) {
     parent_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_parent_id(), 
@@ -849,6 +855,7 @@ CUploadFile::CUploadFile(const CUploadFile& from)
 void CUploadFile::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_CUploadFile_client_5fto_5fserver_2eproto.base);
   md5_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   parent_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   size_ = 0;
 }
@@ -862,6 +869,7 @@ CUploadFile::~CUploadFile() {
 void CUploadFile::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
   md5_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   parent_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -887,6 +895,7 @@ void CUploadFile::Clear() {
   (void) cached_has_bits;
 
   md5_.ClearToEmpty();
+  name_.ClearToEmpty();
   parent_id_.ClearToEmpty();
   size_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -908,16 +917,25 @@ const char* CUploadFile::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 size = 2;
+      // string name = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "SyncCloudDrive.CUploadFile.name"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 size = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
           size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string parent_id = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // string parent_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           auto str = _internal_mutable_parent_id();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "SyncCloudDrive.CUploadFile.parent_id"));
@@ -962,20 +980,30 @@ failure:
         1, this->_internal_md5(), target);
   }
 
-  // int32 size = 2;
-  if (this->size() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_size(), target);
+  // string name = 2;
+  if (this->name().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SyncCloudDrive.CUploadFile.name");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_name(), target);
   }
 
-  // string parent_id = 3;
+  // int32 size = 3;
+  if (this->size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_size(), target);
+  }
+
+  // string parent_id = 4;
   if (this->parent_id().size() > 0) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_parent_id().data(), static_cast<int>(this->_internal_parent_id().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SyncCloudDrive.CUploadFile.parent_id");
     target = stream->WriteStringMaybeAliased(
-        3, this->_internal_parent_id(), target);
+        4, this->_internal_parent_id(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1001,14 +1029,21 @@ size_t CUploadFile::ByteSizeLong() const {
         this->_internal_md5());
   }
 
-  // string parent_id = 3;
+  // string name = 2;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
+  }
+
+  // string parent_id = 4;
   if (this->parent_id().size() > 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_parent_id());
   }
 
-  // int32 size = 2;
+  // int32 size = 3;
   if (this->size() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
@@ -1049,6 +1084,9 @@ void CUploadFile::MergeFrom(const CUploadFile& from) {
   if (from.md5().size() > 0) {
     _internal_set_md5(from._internal_md5());
   }
+  if (from.name().size() > 0) {
+    _internal_set_name(from._internal_name());
+  }
   if (from.parent_id().size() > 0) {
     _internal_set_parent_id(from._internal_parent_id());
   }
@@ -1079,6 +1117,7 @@ void CUploadFile::InternalSwap(CUploadFile* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   md5_.Swap(&other->md5_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   parent_id_.Swap(&other->parent_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   swap(size_, other->size_);
 }

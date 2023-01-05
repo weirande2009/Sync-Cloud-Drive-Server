@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 #include "simple_server/tcp_server.h"
-#include "server/sync_drive_client.h"
+#include "server/sync_drive_client_pool.h"
 
 #include "service/user_service.h"
 #include "service/directory_service.h"
@@ -24,8 +24,10 @@ struct SendPackage{
 
 class SyncDriveServer: public TcpServer{
 private:
-    std::vector<void(SyncDriveServer::*)(SyncDriveClient*)> process_function_pool;
-    std::unordered_map<int, std::unique_ptr<SyncDriveClient>> clients;
+    const int NON_CLIENT_FUNCTION_NUM = 2;
+
+    std::vector<void(SyncDriveServer::*)(SyncDriveConnection*)> process_function_pool;
+    std::unique_ptr<SyncDriveClientPool> client_pool;
 
     // on transmission variables
     std::unordered_map<std::string, std::unordered_set<int>> on_transmission_slides;  // on_transmission_slides[i][j] means filemd5 of i and slide_no of j
@@ -49,18 +51,19 @@ private:
     void SendMessageCallback(Connection* connection);
 
     // processor functions
-    void ProcessRegister(SyncDriveClient* client);
-    void ProcessLogin(SyncDriveClient* client);
-    void ProcessSync(SyncDriveClient* client);
-    void ProcessUploadFile(SyncDriveClient* client);
-    void ProcessDownLoad(SyncDriveClient* client);
-    void ProcessUploadData(SyncDriveClient* client);
-    void ProcessDeleteFile(SyncDriveClient* client);
-    void ProcessAddDirectory(SyncDriveClient* client);
-    void ProcessDeleteDirectory(SyncDriveClient* client);
-    void ProcessModifyUser(SyncDriveClient* client);
+    void ProcessRegister(SyncDriveConnection* connection);
+    void ProcessLogin(SyncDriveConnection* connection);
+    void ProcessSync(SyncDriveConnection* connection);
+    void ProcessUploadFile(SyncDriveConnection* connection);
+    void ProcessDownLoad(SyncDriveConnection* connection);
+    void ProcessUploadData(SyncDriveConnection* connection);
+    void ProcessDeleteFile(SyncDriveConnection* connection);
+    void ProcessAddDirectory(SyncDriveConnection* connection);
+    void ProcessDeleteDirectory(SyncDriveConnection* connection);
+    void ProcessModifyUser(SyncDriveConnection* connection);
 
     // utility functions
+    bool CheckLogin(SyncDriveConnection* connection);
     std::string GetProtobufString(const std::string& data);
 
 public:

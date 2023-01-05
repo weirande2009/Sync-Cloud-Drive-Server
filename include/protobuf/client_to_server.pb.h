@@ -566,8 +566,9 @@ class CUploadFile PROTOBUF_FINAL :
 
   enum : int {
     kMd5FieldNumber = 1,
-    kParentIdFieldNumber = 3,
-    kSizeFieldNumber = 2,
+    kNameFieldNumber = 2,
+    kParentIdFieldNumber = 4,
+    kSizeFieldNumber = 3,
   };
   // string md5 = 1;
   void clear_md5();
@@ -585,7 +586,23 @@ class CUploadFile PROTOBUF_FINAL :
   std::string* _internal_mutable_md5();
   public:
 
-  // string parent_id = 3;
+  // string name = 2;
+  void clear_name();
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
+  public:
+
+  // string parent_id = 4;
   void clear_parent_id();
   const std::string& parent_id() const;
   void set_parent_id(const std::string& value);
@@ -601,7 +618,7 @@ class CUploadFile PROTOBUF_FINAL :
   std::string* _internal_mutable_parent_id();
   public:
 
-  // int32 size = 2;
+  // int32 size = 3;
   void clear_size();
   ::PROTOBUF_NAMESPACE_ID::int32 size() const;
   void set_size(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -618,6 +635,7 @@ class CUploadFile PROTOBUF_FINAL :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr md5_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr parent_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 size_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -1874,7 +1892,68 @@ inline void CUploadFile::set_allocated_md5(std::string* md5) {
   // @@protoc_insertion_point(field_set_allocated:SyncCloudDrive.CUploadFile.md5)
 }
 
-// int32 size = 2;
+// string name = 2;
+inline void CUploadFile::clear_name() {
+  name_.ClearToEmpty();
+}
+inline const std::string& CUploadFile::name() const {
+  // @@protoc_insertion_point(field_get:SyncCloudDrive.CUploadFile.name)
+  return _internal_name();
+}
+inline void CUploadFile::set_name(const std::string& value) {
+  _internal_set_name(value);
+  // @@protoc_insertion_point(field_set:SyncCloudDrive.CUploadFile.name)
+}
+inline std::string* CUploadFile::mutable_name() {
+  // @@protoc_insertion_point(field_mutable:SyncCloudDrive.CUploadFile.name)
+  return _internal_mutable_name();
+}
+inline const std::string& CUploadFile::_internal_name() const {
+  return name_.Get();
+}
+inline void CUploadFile::_internal_set_name(const std::string& value) {
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+}
+inline void CUploadFile::set_name(std::string&& value) {
+  
+  name_.Set(
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:SyncCloudDrive.CUploadFile.name)
+}
+inline void CUploadFile::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
+  // @@protoc_insertion_point(field_set_char:SyncCloudDrive.CUploadFile.name)
+}
+inline void CUploadFile::set_name(const char* value,
+    size_t size) {
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:SyncCloudDrive.CUploadFile.name)
+}
+inline std::string* CUploadFile::_internal_mutable_name() {
+  
+  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
+}
+inline std::string* CUploadFile::release_name() {
+  // @@protoc_insertion_point(field_release:SyncCloudDrive.CUploadFile.name)
+  return name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void CUploadFile::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:SyncCloudDrive.CUploadFile.name)
+}
+
+// int32 size = 3;
 inline void CUploadFile::clear_size() {
   size_ = 0;
 }
@@ -1894,7 +1973,7 @@ inline void CUploadFile::set_size(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:SyncCloudDrive.CUploadFile.size)
 }
 
-// string parent_id = 3;
+// string parent_id = 4;
 inline void CUploadFile::clear_parent_id() {
   parent_id_.ClearToEmpty();
 }

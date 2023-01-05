@@ -13,6 +13,8 @@ SyncDriveServer::SyncDriveServer(): TcpServer(){
     process_function_pool.push_back(ProcessAddDirectory);
     process_function_pool.push_back(ProcessDeleteDirectory);
     process_function_pool.push_back(ProcessModifyUser);
+    // client pool
+    client_pool = std::make_unique<SyncDriveClientPool>();
     // bind receive and send callback functions
     OnConnect(std::bind(&SyncDriveServer::SyncDriveNewConnectionCallback, this, std::placeholders::_1));
     OnDelete(std::bind(&SyncDriveServer::SyncDriveDeleteConnectionCallback, this, std::placeholders::_1));
@@ -85,16 +87,24 @@ void SyncDriveServer::SenderStart(){
  * An overridden function of delete connection
 */
 int SyncDriveServer::SyncDriveDeleteConnectionCallback(Connection* connection){
-    clients.erase(connection->GetSocket()->GetFd());
+    int fd = connection->GetSocket()->GetFd();
+    auto client = client_pool->GetClient(fd);
+    // if there is a client
+    if(client){
+        // remove the connection
+        client_pool->RemoveConnection(fd);
+        // try to remove client
+        client_pool->TryDelete(client->GetUserId());
+    }
+    return 0;
 }
 
 /**
  * An overridden function of delete connection
 */
 int SyncDriveServer::SyncDriveNewConnectionCallback(Connection* connection){
-    // make client
-    std::unique_ptr<SyncDriveClient> client = std::make_unique<SyncDriveClient>(connection);
-    clients[connection->GetSocket()->GetFd()] = std::move(client);
+    client_pool->AddConnection(connection);
+    return 0;
 }
 
 /**
@@ -103,7 +113,11 @@ int SyncDriveServer::SyncDriveNewConnectionCallback(Connection* connection){
 void SyncDriveServer::ProcessMessageCallback(Connection* connection){
     TransmissionHeader header;
     memcpy(&header, connection->GetReadBuf()->c_str(), sizeof(TransmissionHeader));
-    (this->*process_function_pool[header.cmd-1])(clients[connection->GetSocket()->GetFd()].get());
+    auto conn = client_pool->GetConnection(connection->GetSocket()->GetFd());
+    // non-client command or login
+    if(header.cmd < NON_CLIENT_FUNCTION_NUM || CheckLogin(conn)){
+        (this->*process_function_pool[header.cmd-1])(conn);
+    }
 }
 
 /**
@@ -122,11 +136,11 @@ void SyncDriveServer::SendMessageCallback(Connection* connection){
     }
 }
 
-void SyncDriveServer::ProcessRegister(SyncDriveClient* client){
+void SyncDriveServer::ProcessRegister(SyncDriveConnection* connection){
     std::string send_string;
     // Protobuf
     SyncCloudDrive::CRegister c_register;
-    c_register.ParseFromString(GetProtobufString(client->GetConnection()->GetReadBuf()->GetBuf()));
+    c_register.ParseFromString(GetProtobufString(connection->GetConnection()->GetReadBuf()->GetBuf()));
     // Service
     UserService user_service;
     // Construct protobuf to send
@@ -140,14 +154,14 @@ void SyncDriveServer::ProcessRegister(SyncDriveClient* client){
     // convert protobuf to string
     s_register.SerializeToString(&send_string);
     // send
-    client->GetConnection()->Send(send_string);
+    connection->GetConnection()->Send(send_string);
 }
 
-void SyncDriveServer::ProcessLogin(SyncDriveClient* client){
+void SyncDriveServer::ProcessLogin(SyncDriveConnection* connection){
     std::string send_string;
     // Protobuf
     SyncCloudDrive::CLogin c_login;
-    c_login.ParseFromString(GetProtobufString(client->GetConnection()->GetReadBuf()->GetBuf()));
+    c_login.ParseFromString(GetProtobufString(connection->GetConnection()->GetReadBuf()->GetBuf()));
     // Service
     UserService user_service;
     // Construct protobuf to send
@@ -156,7 +170,10 @@ void SyncDriveServer::ProcessLogin(SyncDriveClient* client){
         // add id to client
         auto id = user_service.GetUserId(c_login.name());
         if(id){
-            client->SetUserId(id.value());
+            // get or make a client
+            auto client = client_pool->GetOrMakeClient(id.value());
+            // add connection to the client
+            client->AddConnection(connection);
             s_login.set_state(1);
         }
         else{
@@ -169,58 +186,58 @@ void SyncDriveServer::ProcessLogin(SyncDriveClient* client){
     // convert protobuf to string
     s_login.SerializeToString(&send_string);
     // send
-    client->GetConnection()->Send(send_string);
+    connection->GetConnection()->Send(send_string);
 }
 
-void SyncDriveServer::ProcessSync(SyncDriveClient* client){
+void SyncDriveServer::ProcessSync(SyncDriveConnection* connection){
 
 }
 
-void SyncDriveServer::ProcessUploadFile(SyncDriveClient* client){
+void SyncDriveServer::ProcessUploadFile(SyncDriveConnection* connection){
     std::string send_string;
     // Protobuf
     SyncCloudDrive::CUploadFile c_upload_file;
-    c_upload_file.ParseFromString(GetProtobufString(client->GetConnection()->GetReadBuf()->GetBuf()));
+    c_upload_file.ParseFromString(GetProtobufString(connection->GetConnection()->GetReadBuf()->GetBuf()));
     // Service
     FileService file_service;
     FileMD5Service filemd5_service;
-    // Check whether the file exists in filemd5
-    if(filemd5_service.Has(c_upload_file.md5())){
-        // Check whether the file exists in the user's files
-    }
-    else{
-
-    }
+    // Check whether the file exists in the user's file
+    
+    
     // Construct protobuf to send
     SyncCloudDrive::SUploadFile s_upload_file;
     // convert protobuf to string
     s_upload_file.SerializeToString(&send_string);
     // send
-    client->GetConnection()->Send(send_string);
+    connection->GetConnection()->Send(send_string);
 }
 
-void SyncDriveServer::ProcessDownLoad(SyncDriveClient* client){
-
-}
-
-void SyncDriveServer::ProcessUploadData(SyncDriveClient* client){
+void SyncDriveServer::ProcessDownLoad(SyncDriveConnection* connection){
 
 }
 
-void SyncDriveServer::ProcessDeleteFile(SyncDriveClient* client){
+void SyncDriveServer::ProcessUploadData(SyncDriveConnection* connection){
 
 }
 
-void SyncDriveServer::ProcessAddDirectory(SyncDriveClient* client){
+void SyncDriveServer::ProcessDeleteFile(SyncDriveConnection* connection){
 
 }
 
-void SyncDriveServer::ProcessDeleteDirectory(SyncDriveClient* client){
+void SyncDriveServer::ProcessAddDirectory(SyncDriveConnection* connection){
 
 }
 
-void SyncDriveServer::ProcessModifyUser(SyncDriveClient* client){
+void SyncDriveServer::ProcessDeleteDirectory(SyncDriveConnection* connection){
 
+}
+
+void SyncDriveServer::ProcessModifyUser(SyncDriveConnection* connection){
+
+}
+
+bool SyncDriveServer::CheckLogin(SyncDriveConnection* connection){
+    return client_pool->HasClient(connection->GetFd());
 }
 
 std::string SyncDriveServer::GetProtobufString(const std::string& data){
