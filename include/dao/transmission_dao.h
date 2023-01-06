@@ -23,14 +23,16 @@ public:
     TransmissionDao();
 
     // get
-    std::optional<Transmission> GetByFilemd5Id(const std::string& filemd5_id);
+    std::optional<std::vector<Transmission>> GetAllTransmission(const std::string& filemd5_id);
+    std::optional<Transmission> GetTransmission(const std::string& filemd5_id, int slide_no);
     std::optional<std::string> GetId(const std::string& filemd5_id, const std::string& slide_no);
+    bool HasTransmission(const std::string& filemd5_id);
 
     // set
     bool AddTransmission(const std::string& filemd5_id, int slide_no);
-    bool AddAll(const std::string& filemd5_id, int start_no, int end_no);
-    bool Remove(const std::string& id);
-
+    bool AddAllTransmission(const std::string& filemd5_id, int start_no, int end_no);
+    bool RemoveTransmission(const std::string& id);
+    bool RemoveTransmission(const std::string& filemd5_id, int slide_no);
 };
 
 

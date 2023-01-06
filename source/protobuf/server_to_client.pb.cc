@@ -253,7 +253,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fto_5fclient_2eproto::
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::SUploadFile, md5_),
+  PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::SUploadFile, no_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::SUploadFile, slide_no_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::SDownload, _internal_metadata_),
@@ -325,18 +325,18 @@ const char descriptor_table_protodef_server_5fto_5fclient_2eproto[] PROTOBUF_SEC
   "\013\n\003md5\030\003 \001(\t\032\177\n\tDirectory\022\n\n\002id\030\001 \001(\t\022\014\n"
   "\004name\030\002 \001(\t\022-\n\004sons\030\003 \003(\0132\037.SyncCloudDri"
   "ve.SSync.Directory\022)\n\005files\030\004 \003(\0132\032.Sync"
-  "CloudDrive.SSync.File\",\n\013SUploadFile\022\013\n\003"
-  "md5\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\"<\n\tSDownload"
-  "\022\017\n\007file_id\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\022\014\n\004d"
-  "ata\030\003 \001(\t\"\034\n\013SDeleteFile\022\r\n\005state\030\001 \001(\005\""
-  "\036\n\rSAddDirectory\022\r\n\005state\030\001 \001(\005\"!\n\020SDele"
-  "teDirectory\022\r\n\005state\030\001 \001(\005\"\034\n\013SModifyUse"
-  "r\022\r\n\005state\030\001 \001(\005*\262\001\n\021ServerCommandType\022\016"
-  "\n\nS_REGISTER\020\000\022\013\n\007S_LOGIN\020\001\022\n\n\006S_SYNC\020\002\022"
-  "\021\n\rS_UPLOAD_FILE\020\003\022\016\n\nS_DOWNLOAD\020\004\022\021\n\rS_"
-  "DELETE_FILE\020\005\022\023\n\017S_ADD_DIRECTORY\020\006\022\026\n\022S_"
-  "DELETE_DIRECTORY\020\007\022\021\n\rS_MODIFY_USER\020\010b\006p"
-  "roto3"
+  "CloudDrive.SSync.File\"+\n\013SUploadFile\022\n\n\002"
+  "no\030\001 \001(\005\022\020\n\010slide_no\030\002 \001(\005\"<\n\tSDownload\022"
+  "\017\n\007file_id\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\022\014\n\004da"
+  "ta\030\003 \001(\t\"\034\n\013SDeleteFile\022\r\n\005state\030\001 \001(\005\"\036"
+  "\n\rSAddDirectory\022\r\n\005state\030\001 \001(\005\"!\n\020SDelet"
+  "eDirectory\022\r\n\005state\030\001 \001(\005\"\034\n\013SModifyUser"
+  "\022\r\n\005state\030\001 \001(\005*\262\001\n\021ServerCommandType\022\016\n"
+  "\nS_REGISTER\020\000\022\013\n\007S_LOGIN\020\001\022\n\n\006S_SYNC\020\002\022\021"
+  "\n\rS_UPLOAD_FILE\020\003\022\016\n\nS_DOWNLOAD\020\004\022\021\n\rS_D"
+  "ELETE_FILE\020\005\022\023\n\017S_ADD_DIRECTORY\020\006\022\026\n\022S_D"
+  "ELETE_DIRECTORY\020\007\022\021\n\rS_MODIFY_USER\020\010b\006pr"
+  "oto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_server_5fto_5fclient_2eproto_deps[1] = {
 };
@@ -355,7 +355,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_server_5fto_5fclient_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_server_5fto_5fclient_2eproto = {
-  false, false, descriptor_table_protodef_server_5fto_5fclient_2eproto, "server_to_client.proto", 765,
+  false, false, descriptor_table_protodef_server_5fto_5fclient_2eproto, "server_to_client.proto", 764,
   &descriptor_table_server_5fto_5fclient_2eproto_once, descriptor_table_server_5fto_5fclient_2eproto_sccs, descriptor_table_server_5fto_5fclient_2eproto_deps, 11, 0,
   schemas, file_default_instances, TableStruct_server_5fto_5fclient_2eproto::offsets,
   file_level_metadata_server_5fto_5fclient_2eproto, 11, file_level_enum_descriptors_server_5fto_5fclient_2eproto, file_level_service_descriptors_server_5fto_5fclient_2eproto,
@@ -1622,19 +1622,17 @@ SUploadFile::SUploadFile(::PROTOBUF_NAMESPACE_ID::Arena* arena)
 SUploadFile::SUploadFile(const SUploadFile& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  md5_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (!from._internal_md5().empty()) {
-    md5_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_md5(), 
-      GetArena());
-  }
-  slide_no_ = from.slide_no_;
+  ::memcpy(&no_, &from.no_,
+    static_cast<size_t>(reinterpret_cast<char*>(&slide_no_) -
+    reinterpret_cast<char*>(&no_)) + sizeof(slide_no_));
   // @@protoc_insertion_point(copy_constructor:SyncCloudDrive.SUploadFile)
 }
 
 void SUploadFile::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SUploadFile_server_5fto_5fclient_2eproto.base);
-  md5_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  slide_no_ = 0;
+  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+      reinterpret_cast<char*>(&no_) - reinterpret_cast<char*>(this)),
+      0, static_cast<size_t>(reinterpret_cast<char*>(&slide_no_) -
+      reinterpret_cast<char*>(&no_)) + sizeof(slide_no_));
 }
 
 SUploadFile::~SUploadFile() {
@@ -1645,7 +1643,6 @@ SUploadFile::~SUploadFile() {
 
 void SUploadFile::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
-  md5_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void SUploadFile::ArenaDtor(void* object) {
@@ -1669,8 +1666,9 @@ void SUploadFile::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  md5_.ClearToEmpty();
-  slide_no_ = 0;
+  ::memset(&no_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&slide_no_) -
+      reinterpret_cast<char*>(&no_)) + sizeof(slide_no_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1681,12 +1679,10 @@ const char* SUploadFile::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // string md5 = 1;
+      // int32 no = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          auto str = _internal_mutable_md5();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "SyncCloudDrive.SUploadFile.md5"));
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          no_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1725,14 +1721,10 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string md5 = 1;
-  if (this->md5().size() > 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_md5().data(), static_cast<int>(this->_internal_md5().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SyncCloudDrive.SUploadFile.md5");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_md5(), target);
+  // int32 no = 1;
+  if (this->no() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_no(), target);
   }
 
   // int32 slide_no = 2;
@@ -1757,11 +1749,11 @@ size_t SUploadFile::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string md5 = 1;
-  if (this->md5().size() > 0) {
+  // int32 no = 1;
+  if (this->no() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_md5());
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_no());
   }
 
   // int32 slide_no = 2;
@@ -1802,8 +1794,8 @@ void SUploadFile::MergeFrom(const SUploadFile& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.md5().size() > 0) {
-    _internal_set_md5(from._internal_md5());
+  if (from.no() != 0) {
+    _internal_set_no(from._internal_no());
   }
   if (from.slide_no() != 0) {
     _internal_set_slide_no(from._internal_slide_no());
@@ -1831,8 +1823,12 @@ bool SUploadFile::IsInitialized() const {
 void SUploadFile::InternalSwap(SUploadFile* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  md5_.Swap(&other->md5_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  swap(slide_no_, other->slide_no_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SUploadFile, slide_no_)
+      + sizeof(SUploadFile::slide_no_)
+      - PROTOBUF_FIELD_OFFSET(SUploadFile, no_)>(
+          reinterpret_cast<char*>(&no_),
+          reinterpret_cast<char*>(&other->no_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SUploadFile::GetMetadata() const {

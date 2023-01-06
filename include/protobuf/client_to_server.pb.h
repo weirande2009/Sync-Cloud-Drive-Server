@@ -569,6 +569,7 @@ class CUploadFile PROTOBUF_FINAL :
     kNameFieldNumber = 2,
     kParentIdFieldNumber = 4,
     kSizeFieldNumber = 3,
+    kNoFieldNumber = 5,
   };
   // string md5 = 1;
   void clear_md5();
@@ -627,6 +628,15 @@ class CUploadFile PROTOBUF_FINAL :
   void _internal_set_size(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 no = 5;
+  void clear_no();
+  ::PROTOBUF_NAMESPACE_ID::int32 no() const;
+  void set_no(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_no() const;
+  void _internal_set_no(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:SyncCloudDrive.CUploadFile)
  private:
   class _Internal;
@@ -638,6 +648,7 @@ class CUploadFile PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr parent_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 no_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_client_5fto_5fserver_2eproto;
 };
@@ -912,6 +923,7 @@ class CUploadData PROTOBUF_FINAL :
     kMd5FieldNumber = 1,
     kDataFieldNumber = 3,
     kSlideNoFieldNumber = 2,
+    kNoFieldNumber = 4,
   };
   // string md5 = 1;
   void clear_md5();
@@ -954,6 +966,15 @@ class CUploadData PROTOBUF_FINAL :
   void _internal_set_slide_no(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 no = 4;
+  void clear_no();
+  ::PROTOBUF_NAMESPACE_ID::int32 no() const;
+  void set_no(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_no() const;
+  void _internal_set_no(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:SyncCloudDrive.CUploadData)
  private:
   class _Internal;
@@ -964,6 +985,7 @@ class CUploadData PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr md5_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
   ::PROTOBUF_NAMESPACE_ID::int32 slide_no_;
+  ::PROTOBUF_NAMESPACE_ID::int32 no_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_client_5fto_5fserver_2eproto;
 };
@@ -2034,6 +2056,26 @@ inline void CUploadFile::set_allocated_parent_id(std::string* parent_id) {
   // @@protoc_insertion_point(field_set_allocated:SyncCloudDrive.CUploadFile.parent_id)
 }
 
+// int32 no = 5;
+inline void CUploadFile::clear_no() {
+  no_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CUploadFile::_internal_no() const {
+  return no_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CUploadFile::no() const {
+  // @@protoc_insertion_point(field_get:SyncCloudDrive.CUploadFile.no)
+  return _internal_no();
+}
+inline void CUploadFile::_internal_set_no(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  no_ = value;
+}
+inline void CUploadFile::set_no(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_no(value);
+  // @@protoc_insertion_point(field_set:SyncCloudDrive.CUploadFile.no)
+}
+
 // -------------------------------------------------------------------
 
 // CDownLoad
@@ -2263,6 +2305,26 @@ inline void CUploadData::set_allocated_data(std::string* data) {
   data_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), data,
       GetArena());
   // @@protoc_insertion_point(field_set_allocated:SyncCloudDrive.CUploadData.data)
+}
+
+// int32 no = 4;
+inline void CUploadData::clear_no() {
+  no_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CUploadData::_internal_no() const {
+  return no_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 CUploadData::no() const {
+  // @@protoc_insertion_point(field_get:SyncCloudDrive.CUploadData.no)
+  return _internal_no();
+}
+inline void CUploadData::_internal_set_no(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  no_ = value;
+}
+inline void CUploadData::set_no(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_no(value);
+  // @@protoc_insertion_point(field_set:SyncCloudDrive.CUploadData.no)
 }
 
 // -------------------------------------------------------------------

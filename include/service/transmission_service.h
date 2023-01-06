@@ -12,10 +12,13 @@ private:
 
 public:
 
-    std::optional<Transmission> GetByFilemd5Id(const std::string& filemd5_id);
+    std::optional<std::vector<Transmission>> GetAllTransmission(const std::string& filemd5_id);
+    std::optional<Transmission> GetTransmission(const std::string& filemd5_id, int slide_no);
+    bool HasTransmission(const std::string& filemd5_id);
     bool Add(const std::string& filemd5_id, int slide_no);
     bool AddAll(const std::string& filemd5_id, int start_no, int end_no);
     bool Remove(const std::string& id);
+    bool Remove(const std::string& filemd5_id, int slide_no);
 };
 
 

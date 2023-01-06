@@ -201,11 +201,60 @@ void SyncDriveServer::ProcessUploadFile(SyncDriveConnection* connection){
     // Service
     FileService file_service;
     FileMD5Service filemd5_service;
+    // record the slide no. that will be sent, default set as -1, i.e. finishing uploading
+    int slide_no = -1;
     // Check whether the file exists in the user's file
-    
-    
+    auto file = file_service.GetFile(c_upload_file.name(), c_upload_file.parent_id(), c_upload_file.md5());
+    if(file){  // if there is the file
+        // there are two possibilities: finished or not finished
+        if(file.value().state == 1){  // finished
+            // nothing is needed to do, just send back the finished state
+            slide_no = -1
+        }
+        else if(file.value().state == 0){  // unfinished
+            // need to check which transmission slide is needed and tell the client
+            slide_no = 1;
+        }
+    }
+    else{  // if there isn't the file
+        // create a file object for the user
+        if(!file_service.AddFile(client_pool->GetClient(connection->GetFd())->GetUserId(), c_upload_file.name(), c_upload_file.parent_id(), c_upload_file.md5())){
+            // if fail
+            return;
+        }
+        // Check whether there is a filemd5
+        auto filemd5 = filemd5_service.GetByMD5(c_upload_file.md5());
+        if(filemd5){  // if there is the filemd5
+            // check state
+            if(filemd5.value().state == 1){  // if finished
+                // nothing is needed to do, just send back the finished state
+                slide_no = -1
+            }
+            else{
+                // need to check which transmission slide is needed and tell the client
+                slide_no = 1;
+            }
+        }
+        else{  // if there isn't the filemd5, i.e. a new filemd5
+            // create a new filemd5
+            if(!filemd5_service.Add(c_upload_file.md5(), c_upload_file.size())){  // if fail
+                return;
+            }
+            // for a new filemd5, the first slide no. is always 0
+            slide_no = 0;
+        }
+    }
+    // Check the slide no.
+    if(slide_no != -1){                                              
+        // need to record slide no.
+        auto filemd5 = filemd5_service.GetByMD5(c_upload_file.md5());
+        slide_no = AddNextSlideNoInTransmission(filemd5.value().id);
+    }
     // Construct protobuf to send
     SyncCloudDrive::SUploadFile s_upload_file;
+    // set data
+    s_upload_file.set_no(c_upload_file.no());
+    s_upload_file.set_slide_no(slide_no);
     // convert protobuf to string
     s_upload_file.SerializeToString(&send_string);
     // send
@@ -217,7 +266,55 @@ void SyncDriveServer::ProcessDownLoad(SyncDriveConnection* connection){
 }
 
 void SyncDriveServer::ProcessUploadData(SyncDriveConnection* connection){
-
+    std::string send_string;
+    // Protobuf
+    SyncCloudDrive::CUploadData c_upload_data;
+    c_upload_data.ParseFromString(GetProtobufString(connection->GetConnection()->GetReadBuf()->GetBuf()));
+    // Service
+    FileService file_service;
+    FileMD5Service filemd5_service;
+    TransmissionService transmission_service;
+    // write data to disk
+    if(!filemd5_service.WriteData(c_upload_data.md5(), c_upload_data.slide_no(), c_upload_data.data())){
+        return;
+    }
+    // remove from on_transmission
+    auto filemd5 = filemd5_service.GetByMD5(c_upload_data.md5());
+    if(!filemd5){
+        return;
+    }
+    if(!RemoveSlideNoInTransmission(filemd5.value().id, c_upload_data.slide_no())){
+        return;
+    }
+    // remove from transmission
+    if(!transmission_service.Remove(filemd5.value().id, c_upload_data.slide_no())){
+        return;
+    }
+    // Check the next slide no.
+    int slide_no = GetNextSlideNoInTransmission(filemd5.value().id);
+    if(slide_no == -1){  // if not find the next
+        {
+            std::unique_lock<std::mutex> lock(on_transmission_mutex);
+            if(!transmission_service.HasTransmission(filemd5.value().id)){  // all are received
+                // set state of filemd5
+                filemd5_service.UpdateState(filemd5.value().id, 1);
+                // set state of all file of filemd5
+                file_service.UpdateAllFileState(filemd5.value().id, 1);
+            }
+            else{  // there are still other files on transmission
+                // do something
+            }
+        }
+    }
+    // Construct protobuf to send
+    SyncCloudDrive::SUploadFile s_upload_file;
+    // set data
+    s_upload_file.set_no(c_upload_data.no());
+    s_upload_file.set_slide_no(slide_no);
+    // convert protobuf to string
+    s_upload_file.SerializeToString(&send_string);
+    // send
+    connection->GetConnection()->Send(send_string);
 }
 
 void SyncDriveServer::ProcessDeleteFile(SyncDriveConnection* connection){
@@ -234,6 +331,56 @@ void SyncDriveServer::ProcessDeleteDirectory(SyncDriveConnection* connection){
 
 void SyncDriveServer::ProcessModifyUser(SyncDriveConnection* connection){
 
+}
+
+int SyncDriveServer::AddSlideNoInTransmission(const std::string& filemd5_id, int slide_no){
+    {
+        std::unique_lock<std::mutex> lock(on_transmission_mutex);
+        // add the slide no. to it
+        on_transmission_slides[c_upload_file.md5()].insert(slide_no);
+    }
+}
+
+int SyncDriveServer::GetNextSlideNoInTransmission(const std::string& filemd5_id){
+    {
+        std::unique_lock<std::mutex> lock(on_transmission_mutex);
+        // find the biggest slide_no
+        int max_slide_no = -1;
+        for(int s: on_transmission_slides[filemd5_id]){
+            max_slide_no = max(max_slide_no, s);
+        }
+        TransmissionService transmission_service;
+        // try to find the next slide
+        auto transmission = transmission_service.GetTransmission(filemd5_id, max_slide_no+1);
+        if(transmission){  // if there is
+            return max_slide_no + 1;
+        }
+        else{
+            return -1;
+        }
+    }
+}
+
+int SyncDriveServer::AddNextSlideNoInTransmission(const std::string& filemd5_id){
+    {
+        std::unique_lock<std::mutex> lock(on_transmission_mutex);
+        // find the biggest slide_no
+        int max_slide_no = -1;
+        for(int s: on_transmission_slides[filemd5_id]){
+            max_slide_no = max(max_slide_no, s);
+        }
+        TransmissionService transmission_service;
+        // try to find the next slide
+        auto transmission = transmission_service.GetTransmission(filemd5_id, max_slide_no+1);
+        if(transmission){  // if there is
+            // add the slide no. to it
+            on_transmission_slides[c_upload_file.md5()].insert(max_slide_no + 1);
+            return max_slide_no + 1;
+        }
+        else{
+            return -1;
+        }
+    }
 }
 
 bool SyncDriveServer::CheckLogin(SyncDriveConnection* connection){

@@ -32,16 +32,16 @@ mongocxx::options::find Dao::GetOptions(const std::string& field_name){
     return find_options;
 }
 
-/**
- * Remove an object by id
-*/
-bool Dao::RemoveById(const std::string& id){
+bool Dao::Remove(const std::vector<std::string>& field_names, const FieldValues& field_values){
     try
     {
-        auto result = collection.delete_one(
-            bsoncxx::builder::stream::document{}
-            << "_id" << bsoncxx::oid(id)
-            << bsoncxx::builder::stream::finalize);
+        auto builder = bsoncxx::builder::stream::document{};
+        int n = field_names.size();
+        for(int i=0; i<n; i++){
+            builder << field_names[i] << field_values[i];
+        }
+        builder << bsoncxx::builder::stream::finalize;
+        auto result = collection.delete_one(builder.view());
         if(result){
             if(result.value().deleted_count() > 0){
                 return true;
@@ -54,6 +54,14 @@ bool Dao::RemoveById(const std::string& id){
         std::cerr << e.what() << '\n';
     }
     return false;
+}
+
+
+/**
+ * Remove an object by id
+*/
+bool Dao::RemoveById(const std::string& id){
+    return Remove("_id", bsoncxx::oid(id));
 }
 
 /**

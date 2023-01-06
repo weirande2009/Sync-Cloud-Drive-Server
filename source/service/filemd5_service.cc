@@ -48,8 +48,19 @@ bool FileMD5Service::WriteData(const std::string& md5, int slide_no, const std::
  * Add a file md5
  * @return true: succeed, false: fail
 */
-bool FileMD5Service::Add(const std::string& md5, int size, int slide_num){
-    return filemd5_dao.AddFileMD5(md5, size, slide_num);
+bool FileMD5Service::Add(const std::string& md5, int size){
+    // add a filemd5 object
+    if(filemd5_dao.AddFileMD5(md5, size)){
+        // get the newly added filemd5's id
+        auto filemd5 = filemd5_dao.GetByMD5(md5);
+        if(filemd5){
+            // add transmission objects
+            if(transmission_service.AddAll(filemd5.value().id, 0, filemd5.value().slide_num-1)){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /**

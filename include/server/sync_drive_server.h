@@ -30,7 +30,7 @@ private:
     std::unique_ptr<SyncDriveClientPool> client_pool;
 
     // on transmission variables
-    std::unordered_map<std::string, std::unordered_set<int>> on_transmission_slides;  // on_transmission_slides[i][j] means filemd5 of i and slide_no of j
+    std::unordered_map<std::string, std::unordered_set<int>> on_transmission_slides;  // on_transmission_slides[i][j] means filemd5 md5 of i and slide_no of j
     std::mutex on_transmission_mutex;
 
     
@@ -63,6 +63,10 @@ private:
     void ProcessModifyUser(SyncDriveConnection* connection);
 
     // utility functions
+    bool RemoveSlideNoInTransmission(const std::string& filemd5_id, int slide_no);
+    int GetNextSlideNoInTransmission(const std::string& filemd5_id);
+    int AddSlideNoInTransmission(const std::string& filemd5_id, int slide_no);
+    int AddNextSlideNoInTransmission(const std::string& filemd5_id);
     bool CheckLogin(SyncDriveConnection* connection);
     std::string GetProtobufString(const std::string& data);
 

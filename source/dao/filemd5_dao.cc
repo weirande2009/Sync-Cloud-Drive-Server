@@ -188,7 +188,8 @@ bool FileMd5Dao::WriteData(const std::string& md5, int slide_no, const std::stri
  * Add a file_md5 object
  * @return true: succeed, false: fail
 */
-bool FileMd5Dao::AddFileMD5(const std::string& md5, int size, int slide_num){
+bool FileMd5Dao::AddFileMD5(const std::string& md5, int size){
+    int slide_num = size % SLIDE_SIZE == 0 ? size / SLIDE_SIZE : size / SLIDE_SIZE + 1;
     if(Add(GenerateViewForFileMD5(md5, size, slide_num))){
         CreateFileMD5InDisk(md5, size, slide_num);
         return true;

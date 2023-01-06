@@ -77,6 +77,16 @@ std::optional<std::vector<File>> FileDao::GetAllByUserId(const std::string& user
 }
 
 /**
+ * Get a file object
+ * @return a file object
+*/
+std::optional<File> FileDao::GetFile(const std::string& name, const std::string& directory_id, const std::string& md5){
+    std::vector<std::string> field_names = {"name", "directory_id", "md5"};
+    FieldValues field_values = {name, bsoncxx::oid(directory_id), md5};
+    return GetOne(field_names, field_values, FileDao::GenerateFileFromView);
+}
+
+/**
  * Get md5 by id
  * @return md5
 */
@@ -107,13 +117,13 @@ std::optional<std::string> FileDao::GetMd5ById(const std::string& id){
  * Get id of a file
  * @return id
 */
-std::optional<std::string> FileDao::GetId(const std::string& name, const std::string& directory_id){
+std::optional<std::string> FileDao::GetId(const std::string& directory_id, const std::string& md5){
     try
     {
         auto find_options = GetIdOptions();
         auto result = collection.find_one(
             bsoncxx::builder::stream::document{}
-            << "name" << name
+            << "md5" << md5
             << "directory_id" << bsoncxx::oid(directory_id)
             << bsoncxx::builder::stream::finalize
         );
@@ -129,7 +139,35 @@ std::optional<std::string> FileDao::GetId(const std::string& name, const std::st
         std::cerr << e.what() << '\n';
     }
     return {};
+}
 
+/**
+ * Get id of a file
+ * @return id
+*/
+std::optional<std::string> FileDao::GetId(const std::string& name, const std::string& directory_id, const std::string& md5){
+    try
+    {
+        auto find_options = GetIdOptions();
+        auto result = collection.find_one(
+            bsoncxx::builder::stream::document{}
+            << "name" << name
+            << "md5" << md5
+            << "directory_id" << bsoncxx::oid(directory_id)
+            << bsoncxx::builder::stream::finalize
+        );
+        if(result){ // if found
+            return result.value().view()["_id"].get_oid().value.to_string();
+        }
+        else{
+            return {};
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return {};
 }
 
 /**
@@ -146,6 +184,16 @@ bool FileDao::AddFile(const std::string& user_id, const std::string& name, const
 */
 bool FileDao::UpdateFileState(const std::string& id, int state){
     return UpdateFieldValue(id, "state", state);
+}
+
+/**
+ * Update the state of all files of filemd5_id
+ * @return true: succeed, false: fail
+*/
+bool UpdateAllFileState(const std::string& filemd5_id, int state){
+    std::vector<std::string> field_names = {"filemd5_id"};
+    FieldValues field_values = {bsoncxx::oid(filemd5_id)};
+    return UpdateAllFieldValue(field_names, field_values, "state", state);
 }
 
 /**

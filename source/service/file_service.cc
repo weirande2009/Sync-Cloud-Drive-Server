@@ -37,6 +37,15 @@ bool FileService::UpdateFileState(const std::string& id, int state){
 }
 
 /**
+ * Update the state of all file
+ * @return true: succeed, false: fail
+*/
+bool FileService::UpdateAllFileState(const std::string& filemd5_id, int state){
+    return file_dao.UpdateAllFileState(filemd5_id, state);
+}
+
+
+/**
  * Remove a file
  * @return true: succeed, false: fail
 */
@@ -50,5 +59,41 @@ bool FileService::RemoveFile(const std::string& id){
 */
 bool FileService::UpdateFileName(const std::string& id, const std::string& name){
     return file_dao.UpdateFileName(id, name);
+}
+
+/**
+ * Check whether there is a file
+ * @return true: has, false: hasn't
+*/
+bool FileService::HasFile(const std::string& name, const std::string& directory_id, const std::string& md5){
+    auto file_id = file_dao.GetId(name, directory_id, md5);
+    if(file_id){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+/**
+ * Check whether there is a finished file
+ * @return true: has, false: hasn't
+*/
+bool FileService::HasFinishedFile(const std::string& name, const std::string& directory_id, const std::string& md5){
+    auto file = file_dao.GetFile(name, directory_id, md5);
+    if(file){
+        if(file.value().state == 1){
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Get a file object
+ * @return a file object
+*/
+std::optional<File> FileService::GetFile(const std::string& name, const std::string& directory_id, const std::string& md5){
+    return file_dao.GetFile(name, directory_id, md5);
 }
 

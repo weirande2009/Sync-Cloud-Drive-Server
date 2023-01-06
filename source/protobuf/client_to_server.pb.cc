@@ -197,6 +197,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_client_5fto_5fserver_2eproto::
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, name_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, size_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, parent_id_),
+  PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadFile, no_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CDownLoad, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -212,6 +213,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_client_5fto_5fserver_2eproto::
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadData, md5_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadData, slide_no_),
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadData, data_),
+  PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CUploadData, no_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::SyncCloudDrive::CDeleteFile, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -243,12 +245,12 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, sizeof(::SyncCloudDrive::CRegister)},
   { 7, -1, sizeof(::SyncCloudDrive::CLogin)},
   { 14, -1, sizeof(::SyncCloudDrive::CUploadFile)},
-  { 23, -1, sizeof(::SyncCloudDrive::CDownLoad)},
-  { 30, -1, sizeof(::SyncCloudDrive::CUploadData)},
-  { 38, -1, sizeof(::SyncCloudDrive::CDeleteFile)},
-  { 44, -1, sizeof(::SyncCloudDrive::CAddDirectory)},
-  { 51, -1, sizeof(::SyncCloudDrive::CDeleteDirectory)},
-  { 57, -1, sizeof(::SyncCloudDrive::CModifyUser)},
+  { 24, -1, sizeof(::SyncCloudDrive::CDownLoad)},
+  { 31, -1, sizeof(::SyncCloudDrive::CUploadData)},
+  { 40, -1, sizeof(::SyncCloudDrive::CDeleteFile)},
+  { 46, -1, sizeof(::SyncCloudDrive::CAddDirectory)},
+  { 53, -1, sizeof(::SyncCloudDrive::CDeleteDirectory)},
+  { 59, -1, sizeof(::SyncCloudDrive::CModifyUser)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -267,21 +269,21 @@ const char descriptor_table_protodef_client_5fto_5fserver_2eproto[] PROTOBUF_SEC
   "\n\026client_to_server.proto\022\016SyncCloudDrive"
   "\"/\n\tCRegister\022\014\n\004name\030\001 \001(\t\022\024\n\014password_"
   "md5\030\002 \001(\t\",\n\006CLogin\022\014\n\004name\030\001 \001(\t\022\024\n\014pas"
-  "sword_md5\030\002 \001(\t\"I\n\013CUploadFile\022\013\n\003md5\030\001 "
+  "sword_md5\030\002 \001(\t\"U\n\013CUploadFile\022\013\n\003md5\030\001 "
   "\001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004size\030\003 \001(\005\022\021\n\tparen"
-  "t_id\030\004 \001(\t\".\n\tCDownLoad\022\017\n\007file_id\030\001 \001(\t"
-  "\022\020\n\010slide_no\030\002 \001(\005\":\n\013CUploadData\022\013\n\003md5"
-  "\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\022\014\n\004data\030\003 \001(\t\"\036"
-  "\n\013CDeleteFile\022\017\n\007file_id\030\001 \001(\t\"0\n\rCAddDi"
-  "rectory\022\021\n\tparent_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t"
-  "\"(\n\020CDeleteDirectory\022\024\n\014directory_id\030\001 \001"
-  "(\t\",\n\013CModifyUser\022\014\n\004type\030\001 \001(\005\022\017\n\007conte"
-  "nt\030\002 \001(\t*\305\001\n\021ClientCommandType\022\016\n\nC_REGI"
-  "STER\020\000\022\013\n\007C_LOGIN\020\001\022\n\n\006C_SYNC\020\002\022\021\n\rC_UPL"
-  "OAD_FILE\020\003\022\016\n\nC_DOWNLOAD\020\004\022\021\n\rC_UPLOAD_D"
-  "ATA\020\005\022\021\n\rC_DELETE_FILE\020\006\022\023\n\017C_ADD_DIRECT"
-  "ORY\020\007\022\026\n\022C_DELETE_DIRECTORY\020\010\022\021\n\rC_MODIF"
-  "Y_USER\020\tb\006proto3"
+  "t_id\030\004 \001(\t\022\n\n\002no\030\005 \001(\005\".\n\tCDownLoad\022\017\n\007f"
+  "ile_id\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\"F\n\013CUploa"
+  "dData\022\013\n\003md5\030\001 \001(\t\022\020\n\010slide_no\030\002 \001(\005\022\014\n\004"
+  "data\030\003 \001(\t\022\n\n\002no\030\004 \001(\005\"\036\n\013CDeleteFile\022\017\n"
+  "\007file_id\030\001 \001(\t\"0\n\rCAddDirectory\022\021\n\tparen"
+  "t_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\"(\n\020CDeleteDirec"
+  "tory\022\024\n\014directory_id\030\001 \001(\t\",\n\013CModifyUse"
+  "r\022\014\n\004type\030\001 \001(\005\022\017\n\007content\030\002 \001(\t*\305\001\n\021Cli"
+  "entCommandType\022\016\n\nC_REGISTER\020\000\022\013\n\007C_LOGI"
+  "N\020\001\022\n\n\006C_SYNC\020\002\022\021\n\rC_UPLOAD_FILE\020\003\022\016\n\nC_"
+  "DOWNLOAD\020\004\022\021\n\rC_UPLOAD_DATA\020\005\022\021\n\rC_DELET"
+  "E_FILE\020\006\022\023\n\017C_ADD_DIRECTORY\020\007\022\026\n\022C_DELET"
+  "E_DIRECTORY\020\010\022\021\n\rC_MODIFY_USER\020\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_client_5fto_5fserver_2eproto_deps[1] = {
 };
@@ -298,7 +300,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_cli
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_client_5fto_5fserver_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_client_5fto_5fserver_2eproto = {
-  false, false, descriptor_table_protodef_client_5fto_5fserver_2eproto, "client_to_server.proto", 696,
+  false, false, descriptor_table_protodef_client_5fto_5fserver_2eproto, "client_to_server.proto", 720,
   &descriptor_table_client_5fto_5fserver_2eproto_once, descriptor_table_client_5fto_5fserver_2eproto_sccs, descriptor_table_client_5fto_5fserver_2eproto_deps, 9, 0,
   schemas, file_default_instances, TableStruct_client_5fto_5fserver_2eproto::offsets,
   file_level_metadata_client_5fto_5fserver_2eproto, 9, file_level_enum_descriptors_client_5fto_5fserver_2eproto, file_level_service_descriptors_client_5fto_5fserver_2eproto,
@@ -848,7 +850,9 @@ CUploadFile::CUploadFile(const CUploadFile& from)
     parent_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_parent_id(), 
       GetArena());
   }
-  size_ = from.size_;
+  ::memcpy(&size_, &from.size_,
+    static_cast<size_t>(reinterpret_cast<char*>(&no_) -
+    reinterpret_cast<char*>(&size_)) + sizeof(no_));
   // @@protoc_insertion_point(copy_constructor:SyncCloudDrive.CUploadFile)
 }
 
@@ -857,7 +861,10 @@ void CUploadFile::SharedCtor() {
   md5_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   parent_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  size_ = 0;
+  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+      reinterpret_cast<char*>(&size_) - reinterpret_cast<char*>(this)),
+      0, static_cast<size_t>(reinterpret_cast<char*>(&no_) -
+      reinterpret_cast<char*>(&size_)) + sizeof(no_));
 }
 
 CUploadFile::~CUploadFile() {
@@ -897,7 +904,9 @@ void CUploadFile::Clear() {
   md5_.ClearToEmpty();
   name_.ClearToEmpty();
   parent_id_.ClearToEmpty();
-  size_ = 0;
+  ::memset(&size_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&no_) -
+      reinterpret_cast<char*>(&size_)) + sizeof(no_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -939,6 +948,13 @@ const char* CUploadFile::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           auto str = _internal_mutable_parent_id();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "SyncCloudDrive.CUploadFile.parent_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 no = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          no_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1006,6 +1022,12 @@ failure:
         4, this->_internal_parent_id(), target);
   }
 
+  // int32 no = 5;
+  if (this->no() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_no(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1048,6 +1070,13 @@ size_t CUploadFile::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_size());
+  }
+
+  // int32 no = 5;
+  if (this->no() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_no());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1093,6 +1122,9 @@ void CUploadFile::MergeFrom(const CUploadFile& from) {
   if (from.size() != 0) {
     _internal_set_size(from._internal_size());
   }
+  if (from.no() != 0) {
+    _internal_set_no(from._internal_no());
+  }
 }
 
 void CUploadFile::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -1119,7 +1151,12 @@ void CUploadFile::InternalSwap(CUploadFile* other) {
   md5_.Swap(&other->md5_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   parent_id_.Swap(&other->parent_id_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  swap(size_, other->size_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CUploadFile, no_)
+      + sizeof(CUploadFile::no_)
+      - PROTOBUF_FIELD_OFFSET(CUploadFile, size_)>(
+          reinterpret_cast<char*>(&size_),
+          reinterpret_cast<char*>(&other->size_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CUploadFile::GetMetadata() const {
@@ -1385,7 +1422,9 @@ CUploadData::CUploadData(const CUploadData& from)
     data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_data(), 
       GetArena());
   }
-  slide_no_ = from.slide_no_;
+  ::memcpy(&slide_no_, &from.slide_no_,
+    static_cast<size_t>(reinterpret_cast<char*>(&no_) -
+    reinterpret_cast<char*>(&slide_no_)) + sizeof(no_));
   // @@protoc_insertion_point(copy_constructor:SyncCloudDrive.CUploadData)
 }
 
@@ -1393,7 +1432,10 @@ void CUploadData::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_CUploadData_client_5fto_5fserver_2eproto.base);
   md5_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  slide_no_ = 0;
+  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+      reinterpret_cast<char*>(&slide_no_) - reinterpret_cast<char*>(this)),
+      0, static_cast<size_t>(reinterpret_cast<char*>(&no_) -
+      reinterpret_cast<char*>(&slide_no_)) + sizeof(no_));
 }
 
 CUploadData::~CUploadData() {
@@ -1431,7 +1473,9 @@ void CUploadData::Clear() {
 
   md5_.ClearToEmpty();
   data_.ClearToEmpty();
-  slide_no_ = 0;
+  ::memset(&slide_no_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&no_) -
+      reinterpret_cast<char*>(&slide_no_)) + sizeof(no_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1464,6 +1508,13 @@ const char* CUploadData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           auto str = _internal_mutable_data();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "SyncCloudDrive.CUploadData.data"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 no = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          no_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1521,6 +1572,12 @@ failure:
         3, this->_internal_data(), target);
   }
 
+  // int32 no = 4;
+  if (this->no() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_no(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1556,6 +1613,13 @@ size_t CUploadData::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
         this->_internal_slide_no());
+  }
+
+  // int32 no = 4;
+  if (this->no() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_no());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1598,6 +1662,9 @@ void CUploadData::MergeFrom(const CUploadData& from) {
   if (from.slide_no() != 0) {
     _internal_set_slide_no(from._internal_slide_no());
   }
+  if (from.no() != 0) {
+    _internal_set_no(from._internal_no());
+  }
 }
 
 void CUploadData::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -1623,7 +1690,12 @@ void CUploadData::InternalSwap(CUploadData* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   md5_.Swap(&other->md5_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   data_.Swap(&other->data_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  swap(slide_no_, other->slide_no_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CUploadData, no_)
+      + sizeof(CUploadData::no_)
+      - PROTOBUF_FIELD_OFFSET(CUploadData, slide_no_)>(
+          reinterpret_cast<char*>(&slide_no_),
+          reinterpret_cast<char*>(&other->slide_no_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CUploadData::GetMetadata() const {

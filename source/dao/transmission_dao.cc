@@ -43,10 +43,19 @@ Transmission TransmissionDao::GenerateTransmissionFromView(const bsoncxx::v_noab
 }
 
 /**
- * Get a transmission object by filemd5_id
+ * Get all transmissions of a filemd5
 */
-std::optional<Transmission> TransmissionDao::GetByFilemd5Id(const std::string& filemd5_id){
-    return GetOne("filemd5_id", filemd5_id, GenerateTransmissionFromView);
+std::optional<std::vector<Transmission>> TransmissionDao::GetAllTransmission(const std::string& filemd5_id){
+    return GetAll("filemd5_id", bsoncxx::oid(filemd5_id), GenerateTransmissionFromView);
+}
+
+/**
+ * Get a transmission object by filemd5_id and slide no.
+*/
+std::optional<Transmission> TransmissionDao::GetTransmission(const std::string& filemd5_id, int slide_no){
+    std::vector<std::string> field_names = {"filemd5_id", "slide_no"};
+    FieldValues field_values = {bsoncxx::oid(filemd5_id), slide_no};
+    return GetOne(field_names, field_values, GenerateTransmissionFromView);
 }
 
 /**
@@ -59,7 +68,7 @@ std::optional<std::string> TransmissionDao::GetId(const std::string& filemd5_id,
         auto find_options = GetIdOptions();
         auto result = collection.find_one(
             bsoncxx::builder::stream::document{}
-            << "filemd5_id" << filemd5_id
+            << "filemd5_id" << bsoncxx::oid(filemd5_id)
             << "slide_no" << slide_no
             << bsoncxx::builder::stream::finalize
         );
@@ -89,7 +98,7 @@ bool TransmissionDao::AddTransmission(const std::string& filemd5_id, int slide_n
  * Add all from start_no to end_no
  * @return true:succeed, false: fail
 */
-bool TransmissionDao::AddAll(const std::string& filemd5_id, int start_no, int end_no){
+bool TransmissionDao::AddAllTransmission(const std::string& filemd5_id, int start_no, int end_no){
     for(int i=start_no; i<=end_no; i++){
         if(!Add(GenerateViewForTransmission(filemd5_id, i))){
             return false;
@@ -101,8 +110,45 @@ bool TransmissionDao::AddAll(const std::string& filemd5_id, int start_no, int en
  * Remove a transmission object by id
  * @return true:succeed, false: fail
 */
-bool TransmissionDao::Remove(const std::string& id){
+bool TransmissionDao::RemoveTransmission(const std::string& id){
     return RemoveById(id);
+}
+
+/**
+ * Remove a transmission object by filemd5_id and slide_no
+ * @return true:succeed, false: fail
+*/
+bool TransmissionDao::RemoveTransmission(const std::string& filemd5_id, int slide_no){
+    std::vector<std::string> field_names = {"filemd5_id", "slide_no"};
+    FieldValues field_values = {bsoncxx::oid(filemd5_id), slide_no};
+    return Remove(field_names, field_values);
+}
+
+/**
+ * Check whether there is a transmission by filemd5_id
+ * @return true:has, false: hasn't
+*/
+bool TransmissionDao::HasTransmission(const std::string& filemd5_id){
+    try
+    {
+        auto find_options = GetIdOptions();
+        auto result = collection.find_one(
+            bsoncxx::builder::stream::document{}
+            << "filemd5_id" << bsoncxx::oid(filemd5_id)
+            << bsoncxx::builder::stream::finalize
+        );
+        if(result){ // if found
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return false;
 }
 
 

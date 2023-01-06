@@ -39,7 +39,7 @@ public:
 
     // set
     bool WriteData(const std::string& md5, int slide_no, const std::string& data);
-    bool AddFileMD5(const std::string& md5, int size, int slide_num);
+    bool AddFileMD5(const std::string& md5, int size);
     bool Remove(const std::string& id);
     bool UpdateReferenceNum(const std::string& id, int reference_num);
     bool UpdateState(const std::string& id, int state);

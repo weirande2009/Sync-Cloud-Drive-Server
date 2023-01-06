@@ -34,7 +34,21 @@ protected:
     std::optional<T1> GetOne(const std::vector<std::string>& field_names, const FieldValues& field_values, T1 (T2::*generator_from_view)(const bsoncxx::document::view&));
 
     template <class T>
+    bool Remove(const std::string& field_name, const T& field_value);
+
+    bool Remove(const std::vector<std::string>& field_names, const FieldValues& field_values);
+
+    template <class T>
     bool UpdateFieldValue(const std::string& id, const std::string field_name, const T& value);
+
+    template <class T1, class T2>
+    bool UpdateFieldValue(const std::string& field_name, const T1& field_value, const std::string updated_field_name, const T2& updated_field_value);
+
+    template <class T>
+    bool UpdateFieldValue(const std::vector<std::string>& field_names, const FieldValues& field_values, const std::string updated_field_name, const T& updated_field_value);
+
+    template <class T>
+    bool UpdateAllFieldValue(const std::vector<std::string>& field_names, const FieldValues& field_values, const std::string updated_field_name, const T& updated_field_value);
     
     mongocxx::options::find GetIdOptions();
     mongocxx::options::find GetOptions(const std::string& field_name);
@@ -54,16 +68,107 @@ public:
 */
 template <class T>
 bool Dao::UpdateFieldValue(const std::string& id, const std::string field_name, const T& value){
+    return UpdateFieldValue("_id", bsoncxx::oid(id), field_name, value);
+}
+
+/**
+ * Set field value in collection
+ * @return true: succeed, false: fail
+*/
+template <class T1, class T2>
+bool Dao::UpdateFieldValue(const std::string& field_name, const T1& field_value, const std::string updated_field_name, const T2& updated_field_value){
     try
     {
         auto result = collection.update_one(
             bsoncxx::builder::stream::document{} 
-            << "_id" << bsoncxx::oid(id)
+            << field_name << field_value
             << bsoncxx::builder::stream::finalize,
             bsoncxx::builder::stream::document{} 
             << "$set" 
             << bsoncxx::builder::stream::open_document 
-            << field_name << value
+            << updated_field_name << updated_field_value
+            << bsoncxx::builder::stream::close_document 
+            << bsoncxx::builder::stream::finalize);
+        if(result){
+            if(result.value().modified_count() > 0){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return false;
+}
+
+/**
+ * Set field value in collection
+ * @return true: succeed, false: fail
+*/
+template <class T>
+bool Dao::UpdateFieldValue(const std::vector<std::string>& field_names, const FieldValues& field_values, const std::string updated_field_name, const T& updated_field_value){
+    try
+    {
+        auto builder = bsoncxx::builder::stream::document{};
+        int n = field_names.size();
+        for(int i=0; i<n; i++){
+            builder << field_names[i] << field_values[i];
+        }
+        builder << bsoncxx::builder::stream::finalize;
+        auto result = collection.update_one(
+            builder.view(),
+            bsoncxx::builder::stream::document{} 
+            << "$set" 
+            << bsoncxx::builder::stream::open_document 
+            << updated_field_name << updated_field_value
+            << bsoncxx::builder::stream::close_document 
+            << bsoncxx::builder::stream::finalize);
+        if(result){
+            if(result.value().modified_count() > 0){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return false;
+}
+
+/**
+ * Set field value in collection for all
+ * @return true: succeed, false: fail
+*/
+template <class T>
+bool UpdateAllFieldValue(const std::vector<std::string>& field_names, const FieldValues& field_values, const std::string updated_field_name, const T& updated_field_value){
+    try
+    {
+        auto builder = bsoncxx::builder::stream::document{};
+        int n = field_names.size();
+        for(int i=0; i<n; i++){
+            builder << field_names[i] << field_values[i];
+        }
+        builder << bsoncxx::builder::stream::finalize;
+        auto result = collection.update(
+            builder.view(),
+            bsoncxx::builder::stream::document{} 
+            << "$set" 
+            << bsoncxx::builder::stream::open_document 
+            << updated_field_name << updated_field_value
             << bsoncxx::builder::stream::close_document 
             << bsoncxx::builder::stream::finalize);
         if(result){
@@ -120,10 +225,10 @@ std::optional<std::vector<T1>> Dao::GetAll(const std::vector<std::string>& field
         auto builder = bsoncxx::builder::stream::document{};
         int n = field_names.size();
         for(int i=0; i<n; i++){
-            builder << field_names[i] << field_values[i]
+            builder << field_names[i] << field_values[i];
         }
         builder << bsoncxx::builder::stream::finalize;
-        auto result = collection.find(builder);
+        auto result = collection.find(builder.view());
         std::vector<T1> objects;
         for(auto& doc: result){
             objects.push_back(generator_from_view(doc));
@@ -164,16 +269,16 @@ std::optional<T1> Dao::GetOne(const std::string& field_name, const T2& field_val
 }
 
 template <class T1, class T2>
-    std::optional<T1> Dao::GetOne(const std::vector<std::string>& field_names, const FieldValues& field_values, T1 (T2::*generator_from_view)(const bsoncxx::document::view&)){
+std::optional<T1> Dao::GetOne(const std::vector<std::string>& field_names, const FieldValues& field_values, T1 (T2::*generator_from_view)(const bsoncxx::document::view&)){
     try
     {
         auto builder = bsoncxx::builder::stream::document{};
         int n = field_names.size();
         for(int i=0; i<n; i++){
-            builder << field_names[i] << field_values[i]
+            builder << field_names[i] << field_values[i];
         }
         builder << bsoncxx::builder::stream::finalize;
-        bsoncxx::stdx::optional<bsoncxx::document::value> result = collection.find_one(builder);
+        bsoncxx::stdx::optional<bsoncxx::document::value> result = collection.find_one(builder.view());
         if(result){ // if found
             return generator_from_view(result.value().view());
         }
@@ -186,6 +291,28 @@ template <class T1, class T2>
         std::cerr << e.what() << '\n';
     }
     return {};
+}
+
+template <class T>
+bool Dao::Remove(const std::string& field_name, const T& field_value){
+    try
+    {
+        auto result = collection.delete_one(
+            bsoncxx::builder::stream::document{}
+            << field_name << field_value
+            << bsoncxx::builder::stream::finalize);
+        if(result){
+            if(result.value().deleted_count() > 0){
+                return true;
+            }
+        }
+        return false;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return false;
 }
 
 #endif

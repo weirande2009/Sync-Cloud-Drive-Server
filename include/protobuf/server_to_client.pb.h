@@ -1061,23 +1061,16 @@ class SUploadFile PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kMd5FieldNumber = 1,
+    kNoFieldNumber = 1,
     kSlideNoFieldNumber = 2,
   };
-  // string md5 = 1;
-  void clear_md5();
-  const std::string& md5() const;
-  void set_md5(const std::string& value);
-  void set_md5(std::string&& value);
-  void set_md5(const char* value);
-  void set_md5(const char* value, size_t size);
-  std::string* mutable_md5();
-  std::string* release_md5();
-  void set_allocated_md5(std::string* md5);
+  // int32 no = 1;
+  void clear_no();
+  ::PROTOBUF_NAMESPACE_ID::int32 no() const;
+  void set_no(::PROTOBUF_NAMESPACE_ID::int32 value);
   private:
-  const std::string& _internal_md5() const;
-  void _internal_set_md5(const std::string& value);
-  std::string* _internal_mutable_md5();
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_no() const;
+  void _internal_set_no(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // int32 slide_no = 2;
@@ -1096,7 +1089,7 @@ class SUploadFile PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr md5_;
+  ::PROTOBUF_NAMESPACE_ID::int32 no_;
   ::PROTOBUF_NAMESPACE_ID::int32 slide_no_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fto_5fclient_2eproto;
@@ -2374,65 +2367,24 @@ inline void SSync::set_allocated_root(::SyncCloudDrive::SSync_Directory* root) {
 
 // SUploadFile
 
-// string md5 = 1;
-inline void SUploadFile::clear_md5() {
-  md5_.ClearToEmpty();
+// int32 no = 1;
+inline void SUploadFile::clear_no() {
+  no_ = 0;
 }
-inline const std::string& SUploadFile::md5() const {
-  // @@protoc_insertion_point(field_get:SyncCloudDrive.SUploadFile.md5)
-  return _internal_md5();
+inline ::PROTOBUF_NAMESPACE_ID::int32 SUploadFile::_internal_no() const {
+  return no_;
 }
-inline void SUploadFile::set_md5(const std::string& value) {
-  _internal_set_md5(value);
-  // @@protoc_insertion_point(field_set:SyncCloudDrive.SUploadFile.md5)
+inline ::PROTOBUF_NAMESPACE_ID::int32 SUploadFile::no() const {
+  // @@protoc_insertion_point(field_get:SyncCloudDrive.SUploadFile.no)
+  return _internal_no();
 }
-inline std::string* SUploadFile::mutable_md5() {
-  // @@protoc_insertion_point(field_mutable:SyncCloudDrive.SUploadFile.md5)
-  return _internal_mutable_md5();
-}
-inline const std::string& SUploadFile::_internal_md5() const {
-  return md5_.Get();
-}
-inline void SUploadFile::_internal_set_md5(const std::string& value) {
+inline void SUploadFile::_internal_set_no(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
-  md5_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
+  no_ = value;
 }
-inline void SUploadFile::set_md5(std::string&& value) {
-  
-  md5_.Set(
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
-  // @@protoc_insertion_point(field_set_rvalue:SyncCloudDrive.SUploadFile.md5)
-}
-inline void SUploadFile::set_md5(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  
-  md5_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
-  // @@protoc_insertion_point(field_set_char:SyncCloudDrive.SUploadFile.md5)
-}
-inline void SUploadFile::set_md5(const char* value,
-    size_t size) {
-  
-  md5_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
-      reinterpret_cast<const char*>(value), size), GetArena());
-  // @@protoc_insertion_point(field_set_pointer:SyncCloudDrive.SUploadFile.md5)
-}
-inline std::string* SUploadFile::_internal_mutable_md5() {
-  
-  return md5_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
-}
-inline std::string* SUploadFile::release_md5() {
-  // @@protoc_insertion_point(field_release:SyncCloudDrive.SUploadFile.md5)
-  return md5_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-}
-inline void SUploadFile::set_allocated_md5(std::string* md5) {
-  if (md5 != nullptr) {
-    
-  } else {
-    
-  }
-  md5_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), md5,
-      GetArena());
-  // @@protoc_insertion_point(field_set_allocated:SyncCloudDrive.SUploadFile.md5)
+inline void SUploadFile::set_no(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_no(value);
+  // @@protoc_insertion_point(field_set:SyncCloudDrive.SUploadFile.no)
 }
 
 // int32 slide_no = 2;
