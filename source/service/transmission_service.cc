@@ -9,7 +9,7 @@ TransmissionService::TransmissionService(){
  * Get all transmissions by filemd5_id
  * @return a list of transmission objects
 */
-std::optional<std::vector<Transmission>> TransmissionService::GetAllTransmission(const std::string& filemd5_id){
+std::optional<std::vector<std::unique_ptr<Transmission>>> TransmissionService::GetAllTransmission(const std::string& filemd5_id){
     return transmission_dao.GetAllTransmission(filemd5_id);
 }
 
@@ -17,7 +17,7 @@ std::optional<std::vector<Transmission>> TransmissionService::GetAllTransmission
  * Get a transmission by filemd5_id and slide no.
  * @return a transmission object
 */
-std::optional<Transmission> TransmissionService::GetTransmission(const std::string& filemd5_id, int slide_no){
+std::optional<std::unique_ptr<Transmission>> TransmissionService::GetTransmission(const std::string& filemd5_id, int slide_no){
     return transmission_dao.GetTransmission(filemd5_id, slide_no);
 }
 

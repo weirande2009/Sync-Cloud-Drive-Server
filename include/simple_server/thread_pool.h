@@ -43,7 +43,7 @@ auto ThreadPool::Add(F &&f, Args &&...args) -> std::future<typename std::invoke_
             throw std::runtime_error("enqueue on stopped ThreadPool");
         }
 
-        tasks.emplace_back([task]() { (*task)(); });
+        tasks.emplace([task]() { (*task)(); });
     }
     condition_variable.notify_one();
     return res;

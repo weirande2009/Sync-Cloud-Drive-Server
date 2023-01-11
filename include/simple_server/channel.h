@@ -7,6 +7,8 @@
 #include "simple_server/event_loop.h"
 #include "simple_server/socket.h"
 
+class EventLoop;
+
 class Channel {
 public:
     DISALLOW_COPY_AND_MOVE(Channel);

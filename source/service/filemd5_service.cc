@@ -8,7 +8,7 @@ FileMD5Service::FileMD5Service(){
  * Get a file md5 object by id
  * @return a file_md5 object
 */
-std::optional<FileMD5> FileMD5Service::GetByMD5(const std::string& md5){
+std::optional<std::unique_ptr<FileMD5>> FileMD5Service::GetByMD5(const std::string& md5){
     return filemd5_dao.GetByMD5(md5);
 }
 
@@ -55,7 +55,7 @@ bool FileMD5Service::Add(const std::string& md5, int size){
         auto filemd5 = filemd5_dao.GetByMD5(md5);
         if(filemd5){
             // add transmission objects
-            if(transmission_service.AddAll(filemd5.value().id, 0, filemd5.value().slide_num-1)){
+            if(transmission_service.AddAll(filemd5.value()->id, 0, filemd5.value()->slide_num-1)){
                 return true;
             }
         }
@@ -69,6 +69,19 @@ bool FileMD5Service::Add(const std::string& md5, int size){
 */
 bool FileMD5Service::Remove(const std::string& id){
     return filemd5_dao.Remove(id);
+}
+
+/**
+ * Remvoe one reference from file md5
+ * @return true: succeed, false: fail
+*/
+bool FileMD5Service::RemoveOne(const std::string& id){
+    // only remove the reference number, keep the file
+    auto rn = filemd5_dao.GetReferenceNum(id);
+    if(rn){
+        return UpdateReferenceNum(id, rn.value()-1);
+    }
+    return false;
 }
 
 /**

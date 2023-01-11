@@ -23,12 +23,12 @@ public:
     DirectoryDao();
 
     // get
-    std::optional<std::vector<Directory>> GetAllByUserId(const std::string& user_id);
-    std::optional<std::vector<Directory>> GetAllByParentId(const std::string& parent_id);
+    std::optional<std::vector<std::unique_ptr<Directory>>> GetAllByUserId(const std::string& user_id);
+    std::optional<std::vector<std::unique_ptr<Directory>>> GetAllByParentId(const std::string& parent_id);
     std::optional<std::string> GetDirectoryId(const std::string& name, const std::string& parent_id, const std::string& user_id);
     bool Has(const std::string& name, const std::string& parent_id, const std::string& user_id);
     bool Has(const std::string& id);
-    Directory GetRootDirectory(const std::string& user_id);
+    std::optional<std::unique_ptr<Directory>> GetRootDirectory(const std::string& user_id);
 
     // set
     bool UpdateName(const std::string& id, const std::string& name);

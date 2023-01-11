@@ -45,14 +45,14 @@ Transmission TransmissionDao::GenerateTransmissionFromView(const bsoncxx::v_noab
 /**
  * Get all transmissions of a filemd5
 */
-std::optional<std::vector<Transmission>> TransmissionDao::GetAllTransmission(const std::string& filemd5_id){
+std::optional<std::vector<std::unique_ptr<Transmission>>> TransmissionDao::GetAllTransmission(const std::string& filemd5_id){
     return GetAll("filemd5_id", bsoncxx::oid(filemd5_id), GenerateTransmissionFromView);
 }
 
 /**
  * Get a transmission object by filemd5_id and slide no.
 */
-std::optional<Transmission> TransmissionDao::GetTransmission(const std::string& filemd5_id, int slide_no){
+std::optional<std::unique_ptr<Transmission>> TransmissionDao::GetTransmission(const std::string& filemd5_id, int slide_no){
     std::vector<std::string> field_names = {"filemd5_id", "slide_no"};
     FieldValues field_values = {bsoncxx::oid(filemd5_id), slide_no};
     return GetOne(field_names, field_values, GenerateTransmissionFromView);
@@ -65,13 +65,9 @@ std::optional<Transmission> TransmissionDao::GetTransmission(const std::string& 
 std::optional<std::string> TransmissionDao::GetId(const std::string& filemd5_id, const std::string& slide_no){
     try
     {
-        auto find_options = GetIdOptions();
-        auto result = collection.find_one(
-            bsoncxx::builder::stream::document{}
-            << "filemd5_id" << bsoncxx::oid(filemd5_id)
-            << "slide_no" << slide_no
-            << bsoncxx::builder::stream::finalize
-        );
+        std::vector<std::string> field_names = {"filemd5_id", "slide_no"};
+        FieldValues field_values = {bsoncxx::oid(filemd5_id), slide_no};
+        auto result = GetFieldValue(field_names, field_values, "_id");
         if(result){ // if found
             return result.value().view()["_id"].get_oid().value.to_string();
         }
@@ -91,7 +87,9 @@ std::optional<std::string> TransmissionDao::GetId(const std::string& filemd5_id,
  * @return true:succeed, false: fail
 */
 bool TransmissionDao::AddTransmission(const std::string& filemd5_id, int slide_no){
-    return Add(GenerateViewForTransmission(filemd5_id, slide_no));
+    std::vector<std::string> field_names = {"filemd5_id", "slide_no"};
+    FieldValues field_values = {bsoncxx::oid(filemd5_id), slide_no};
+    return Add(field_names, field_values);
 }
 
 /**
@@ -100,7 +98,7 @@ bool TransmissionDao::AddTransmission(const std::string& filemd5_id, int slide_n
 */
 bool TransmissionDao::AddAllTransmission(const std::string& filemd5_id, int start_no, int end_no){
     for(int i=start_no; i<=end_no; i++){
-        if(!Add(GenerateViewForTransmission(filemd5_id, i))){
+        if(!AddTransmission(filemd5_id, i)){
             return false;
         }
     }
@@ -121,7 +119,7 @@ bool TransmissionDao::RemoveTransmission(const std::string& id){
 bool TransmissionDao::RemoveTransmission(const std::string& filemd5_id, int slide_no){
     std::vector<std::string> field_names = {"filemd5_id", "slide_no"};
     FieldValues field_values = {bsoncxx::oid(filemd5_id), slide_no};
-    return Remove(field_names, field_values);
+    return RemoveOne(field_names, field_values);
 }
 
 /**
@@ -131,12 +129,7 @@ bool TransmissionDao::RemoveTransmission(const std::string& filemd5_id, int slid
 bool TransmissionDao::HasTransmission(const std::string& filemd5_id){
     try
     {
-        auto find_options = GetIdOptions();
-        auto result = collection.find_one(
-            bsoncxx::builder::stream::document{}
-            << "filemd5_id" << bsoncxx::oid(filemd5_id)
-            << bsoncxx::builder::stream::finalize
-        );
+        auto result = GetFieldValue("filemd5_id", bsoncxx::oid(filemd5_id), "_id");
         if(result){ // if found
             return true;
         }
@@ -150,10 +143,3 @@ bool TransmissionDao::HasTransmission(const std::string& filemd5_id){
     }
     return false;
 }
-
-
-
-
-
-
-

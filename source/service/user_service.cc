@@ -12,9 +12,8 @@ bool UserService::Login(const std::string& name, const std::string& password){
     // find the user object of the name
     auto user = user_dao.GetByName(name);
     if(user){
-        auto u = user.value();
         // check whether the password matches
-        if(u.password == password){
+        if(user.value()->password == password){
             return true;
         }
     }

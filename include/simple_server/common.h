@@ -17,3 +17,14 @@ struct TransmissionHeader{
     int cmd;
     int length;
 };
+
+class Acceptor;
+class Buffer;
+class Channel;
+class Connection;
+class EventLoop;
+class Poller;
+class ReactorPool;
+class Socket;
+class TcpServer;
+class ThreadPool;

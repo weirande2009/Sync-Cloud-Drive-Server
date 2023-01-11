@@ -23,8 +23,8 @@ public:
     TransmissionDao();
 
     // get
-    std::optional<std::vector<Transmission>> GetAllTransmission(const std::string& filemd5_id);
-    std::optional<Transmission> GetTransmission(const std::string& filemd5_id, int slide_no);
+    std::optional<std::vector<std::unique_ptr<Transmission>>> GetAllTransmission(const std::string& filemd5_id);
+    std::optional<std::unique_ptr<Transmission>> GetTransmission(const std::string& filemd5_id, int slide_no);
     std::optional<std::string> GetId(const std::string& filemd5_id, const std::string& slide_no);
     bool HasTransmission(const std::string& filemd5_id);
 

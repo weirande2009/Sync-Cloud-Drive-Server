@@ -32,9 +32,10 @@ public:
     FileMd5Dao();
 
     // get
-    std::optional<FileMD5> GetByMD5(const std::string& md5);
+    std::optional<std::unique_ptr<FileMD5>> GetByMD5(const std::string& md5);
     bool Has(const std::string& md5);
     std::optional<std::string> GetId(const std::string& md5);
+    std::optional<int> GetReferenceNum(const std::string& id);
     std::optional<std::string> ReadData(const std::string& md5, int slide_no);
 
     // set

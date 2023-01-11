@@ -14,7 +14,7 @@
 class TcpServer {
 public:
     DISALLOW_COPY_AND_MOVE(TcpServer);
-    TcpServer();
+    TcpServer(const char* ip, int port);
     ~TcpServer();
     void Start();
 

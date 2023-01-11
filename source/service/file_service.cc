@@ -8,7 +8,7 @@ FileService::FileService(){
  * Get all files by directory id
  * @return a list of files
 */
-std::optional<std::vector<File>> FileService::GetAllByDirectoryId(const std::string& directory_id){
+std::optional<std::vector<std::unique_ptr<File>>> FileService::GetAllByDirectoryId(const std::string& directory_id){
     return file_dao.GetAllByDirectoryId(directory_id);
 }
 
@@ -16,7 +16,7 @@ std::optional<std::vector<File>> FileService::GetAllByDirectoryId(const std::str
  * Get all finished files by directory id
  * @return a list of files
 */
-std::optional<std::vector<File>> FileService::GetAllFinishedByDirectoryId(const std::string& directory_id){
+std::optional<std::vector<std::unique_ptr<File>>> FileService::GetAllFinishedByDirectoryId(const std::string& directory_id){
     return file_dao.GetAllFinishedByDirectoryId(directory_id);
 }
 
@@ -44,13 +44,22 @@ bool FileService::UpdateAllFileState(const std::string& filemd5_id, int state){
     return file_dao.UpdateAllFileState(filemd5_id, state);
 }
 
-
 /**
  * Remove a file
  * @return true: succeed, false: fail
 */
 bool FileService::RemoveFile(const std::string& id){
-    return file_dao.RemoveFile(id);
+    auto md5 = file_dao.GetMd5ById(id);
+    if(md5){
+        if(file_dao.RemoveFile(id)){
+            // remove from filemd5
+            auto filemd5_id = filemd5_service.GetId(md5.value());
+            if(filemd5_id){
+                return filemd5_service.RemoveOne(filemd5_id.value());
+            }
+        }
+    }
+    return false;
 }
 
 /**
@@ -82,7 +91,7 @@ bool FileService::HasFile(const std::string& name, const std::string& directory_
 bool FileService::HasFinishedFile(const std::string& name, const std::string& directory_id, const std::string& md5){
     auto file = file_dao.GetFile(name, directory_id, md5);
     if(file){
-        if(file.value().state == 1){
+        if(file.value()->state == 1){
             return true;
         }
     }
@@ -93,7 +102,15 @@ bool FileService::HasFinishedFile(const std::string& name, const std::string& di
  * Get a file object
  * @return a file object
 */
-std::optional<File> FileService::GetFile(const std::string& name, const std::string& directory_id, const std::string& md5){
+std::optional<std::unique_ptr<File>> FileService::GetFile(const std::string& name, const std::string& directory_id, const std::string& md5){
     return file_dao.GetFile(name, directory_id, md5);
+}
+
+/**
+ * Get a file object
+ * @return a file object
+*/
+std::optional<std::unique_ptr<File>> FileService::GetFile(const std::string& id){
+    return file_dao.GetFile(id);
 }
 

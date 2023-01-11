@@ -88,7 +88,7 @@ FileMD5 FileMd5Dao::GenerateFileMD5FromView(const bsoncxx::v_noabi::document::vi
  * Get a file_md5 object by md5
  * @return a FileMD5 object
 */
-std::optional<FileMD5> FileMd5Dao::GetByMD5(const std::string& md5){
+std::optional<std::unique_ptr<FileMD5>> FileMd5Dao::GetByMD5(const std::string& md5){
     return GetOne("md5", md5, GenerateFileMD5FromView);
 }
 
@@ -112,14 +112,30 @@ bool FileMd5Dao::Has(const std::string& md5){
 std::optional<std::string> FileMd5Dao::GetId(const std::string& md5){
     try
     {
-        auto find_options = GetIdOptions();
-        auto result = collection.find_one(
-            bsoncxx::builder::stream::document{}
-            << "md5" << md5
-            << bsoncxx::builder::stream::finalize
-        );
+        auto result = GetFieldValue("md5", md5, "_id");
         if(result){ // if found
             return result.value().view()["_id"].get_oid().value.to_string();
+        }
+        else{
+            return {};
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return {};
+}
+
+/**
+ * Get the reference number of
+*/
+std::optional<int> FileMd5Dao::GetReferenceNum(const std::string& id){
+    try
+    {
+        auto result = GetFieldValue("_id", bsoncxx::oid(id), "reference_num");
+        if(result){ // if found
+            return result.value().view()["reference_num"].get_int32();
         }
         else{
             return {};
@@ -190,7 +206,9 @@ bool FileMd5Dao::WriteData(const std::string& md5, int slide_no, const std::stri
 */
 bool FileMd5Dao::AddFileMD5(const std::string& md5, int size){
     int slide_num = size % SLIDE_SIZE == 0 ? size / SLIDE_SIZE : size / SLIDE_SIZE + 1;
-    if(Add(GenerateViewForFileMD5(md5, size, slide_num))){
+    std::vector<std::string> field_names = {"md5", "size", "slide_num"};
+    FieldValues field_values = {md5, size, slide_num};
+    if(Add(field_names, field_values)){
         CreateFileMD5InDisk(md5, size, slide_num);
         return true;
     }
@@ -212,7 +230,7 @@ bool FileMd5Dao::Remove(const std::string& id){
  * @return true: succeed, false: fail
 */
 bool FileMd5Dao::UpdateReferenceNum(const std::string& id, int reference_num){
-    return UpdateFieldValue(id, "reference_num", reference_num);
+    return UpdateFieldValue("_id", bsoncxx::oid(id), "reference_num", reference_num);
 }
 
 /**
@@ -220,5 +238,5 @@ bool FileMd5Dao::UpdateReferenceNum(const std::string& id, int reference_num){
  * @return true: succeed, false: fail
 */
 bool FileMd5Dao::UpdateState(const std::string& id, int state){
-    return UpdateFieldValue(id, "state", state);
+    return UpdateFieldValue("_id", bsoncxx::oid(id), "state", state);
 }

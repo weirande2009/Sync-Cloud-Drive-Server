@@ -71,7 +71,7 @@ private:
     std::string GetProtobufString(const std::string& data);
 
 public:
-    SyncDriveServer();
+    SyncDriveServer(int port);
     ~SyncDriveServer();
     void Start();
 

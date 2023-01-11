@@ -23,7 +23,7 @@ public:
     UserDao();
 
     // get
-    std::optional<User> GetByName(const std::string& name);
+    std::optional<std::unique_ptr<User>> GetByName(const std::string& name);
     bool HasByName(const std::string& name);
     std::optional<std::string> GetId(const std::string& name);
 

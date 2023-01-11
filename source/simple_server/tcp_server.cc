@@ -1,8 +1,8 @@
 #include "simple_server/tcp_server.h"
 
-TcpServer::TcpServer() {
+TcpServer::TcpServer(const char* ip, int port) {
     main_reactor = std::make_unique<EventLoop>(0);
-    acceptor = std::make_unique<Acceptor>(main_reactor.get());
+    acceptor = std::make_unique<Acceptor>(main_reactor.get(), ip, port);
     std::function<void(int)> cb = std::bind(&TcpServer::NewConnection, this, std::placeholders::_1);
     acceptor->SetNewConnectionCallback(cb);
 

@@ -52,7 +52,7 @@ Directory DirectoryDao::GenerateDirectoryFromView(const bsoncxx::document::view&
  * Get a list of directory from user_id
  * @return an optional of Directory object
 */
-std::optional<std::vector<Directory>> DirectoryDao::GetAllByUserId(const std::string& user_id){
+std::optional<std::vector<std::unique_ptr<Directory>>> DirectoryDao::GetAllByUserId(const std::string& user_id){
     return GetAll<Directory, bsoncxx::oid, DirectoryDao>("_id", bsoncxx::oid(user_id), DirectoryDao::GenerateDirectoryFromView);
 }
 
@@ -60,7 +60,7 @@ std::optional<std::vector<Directory>> DirectoryDao::GetAllByUserId(const std::st
  * Get a list of directory from parent_id
  * @return an optional of Directory object
 */
-std::optional<std::vector<Directory>> DirectoryDao::GetAllByParentId(const std::string& parent_id){
+std::optional<std::vector<std::unique_ptr<Directory>>> DirectoryDao::GetAllByParentId(const std::string& parent_id){
     return GetAll<Directory, bsoncxx::oid, DirectoryDao>("parent_id", bsoncxx::oid(parent_id), DirectoryDao::GenerateDirectoryFromView);
 }
 
@@ -71,14 +71,10 @@ std::optional<std::vector<Directory>> DirectoryDao::GetAllByParentId(const std::
 std::optional<std::string> DirectoryDao::GetDirectoryId(const std::string& name, const std::string& parent_id, const std::string& user_id){
     try
     {
-        auto find_options = GetIdOptions();
-        auto result = collection.find_one(
-            bsoncxx::builder::stream::document{}
-            << "name" << name
-            << "parent_id" << bsoncxx::oid(parent_id)
-            << "user_id" << bsoncxx::oid(user_id)
-            << bsoncxx::builder::stream::finalize
-        );
+        std::vector<std::string> field_names = {"name", "parent_id", "user_id"};
+        FieldValues field_values = {name, bsoncxx::oid(parent_id), bsoncxx::oid(user_id)};
+        std::string target_field_name = "_id";
+        auto result = GetFieldValue(field_names, field_values, target_field_name);
         if(result){ // if found
             return result.value().view()["_id"].get_oid().value.to_string();
         }
@@ -114,12 +110,7 @@ bool DirectoryDao::Has(const std::string& name, const std::string& parent_id, co
 bool DirectoryDao::Has(const std::string& id){
     try
     {
-        auto find_options = GetIdOptions();
-        auto result = collection.find_one(
-            bsoncxx::builder::stream::document{}
-            << "_id" << bsoncxx::oid(id)
-            << bsoncxx::builder::stream::finalize
-        );
+        auto result = GetFieldValue("_id", bsoncxx::oid(id), "_id");
         if(result){ // if found
             return true;
         }
@@ -138,11 +129,10 @@ bool DirectoryDao::Has(const std::string& id){
  * Get the root directory of a user
  * @return the root directory
 */
-Directory DirectoryDao::GetRootDirectory(const std::string& user_id){
+std::optional<std::unique_ptr<Directory>> DirectoryDao::GetRootDirectory(const std::string& user_id){
     std::vector<std::string> field_names = {"user_id", "is_root"};
-    FieldValues field_values = {user_id, true};
-    auto result = GetOne(field_names, field_values, GenerateDirectoryFromView);
-    return result.value();
+    FieldValues field_values = {bsoncxx::oid(user_id), true};
+    return GetOne(field_names, field_values, GenerateDirectoryFromView);
 }
 
 /**
@@ -150,7 +140,7 @@ Directory DirectoryDao::GetRootDirectory(const std::string& user_id){
  * @return true: succeed, false: fail
 */
 bool DirectoryDao::UpdateName(const std::string& id, const std::string& name){
-    return UpdateFieldValue(id, "name", name);
+    return UpdateFieldValue("_id", bsoncxx::oid(id), "name", name);
 }
 
 /**
@@ -160,7 +150,9 @@ bool DirectoryDao::AddDirectory(const std::string& name, const std::string& pare
     if(Has(name, parent_id, user_id)){
         return false;
     }
-    return Add(GenerateViewForDirectory(name, parent_id, user_id));
+    std::vector<std::string> field_names = {"name", "parent_id", "user_id"};
+    FieldValues field_values = {name, bsoncxx::oid(parent_id), bsoncxx::oid(user_id)};
+    return Add(field_names, field_values);
 }
 
 /**

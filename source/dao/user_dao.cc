@@ -49,7 +49,7 @@ User UserDao::GenerateUserFromView(const bsoncxx::document::view& view){
  * Get a User object by name
  * @return an optional of User object
 */
-std::optional<User> UserDao::GetByName(const std::string& name){
+std::optional<std::unique_ptr<User>> UserDao::GetByName(const std::string& name){
     return GetOne("name", name, UserDao::GenerateUserFromView);
 }
 
@@ -60,12 +60,7 @@ std::optional<User> UserDao::GetByName(const std::string& name){
 std::optional<std::string> UserDao::GetId(const std::string& name){
     try
     {
-        auto find_options = GetIdOptions();
-        bsoncxx::stdx::optional<bsoncxx::document::value> result = collection.find_one(
-            bsoncxx::builder::stream::document{}
-            << "name" << name
-            << bsoncxx::builder::stream::finalize,
-            find_options);
+        auto result = GetFieldValue("name", name, "_id");
         if(result){ // if found
             return result.value().view()["_id"].get_oid().value.to_string();
         }
@@ -99,7 +94,7 @@ bool UserDao::HasByName(const std::string& name){
  * @return true: succeed, false: fail
 */
 bool UserDao::UpdatePassword(const std::string& id, const std::string& password){
-    return UpdateFieldValue(id, "password", password);
+    return UpdateFieldValue("_id", bsoncxx::oid(id), "password", password);
 }
 
 /**
@@ -107,7 +102,7 @@ bool UserDao::UpdatePassword(const std::string& id, const std::string& password)
  * @return true: succeed, false: fail
 */
 bool UserDao::UpdateSyncDirectoryId(const std::string& id, const std::string& sync_directory_id){
-    return UpdateFieldValue(id, "sync_directory_id", bsoncxx::oid(sync_directory_id));
+    return UpdateFieldValue("_id", bsoncxx::oid(id), "sync_directory_id", bsoncxx::oid(sync_directory_id));
 }
 
 /**
@@ -118,7 +113,9 @@ bool UserDao::AddUser(const std::string& name, const std::string& password){
     if(HasByName(name)){
         return false;
     }
-    return Add(GenerateViewForUser(name, password));
+    std::vector<std::string> field_names = {"name", "password"};
+    FieldValues field_values = {name, password};
+    return Add(field_names, field_values);
 }
 
 

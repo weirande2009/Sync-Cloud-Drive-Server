@@ -9,6 +9,10 @@ private:
     UserDao user_dao;
 
 public:
+    enum ModificationType{
+        Password,
+    };
+
     UserService();
 
     bool Login(const std::string& name, const std::string& password);
