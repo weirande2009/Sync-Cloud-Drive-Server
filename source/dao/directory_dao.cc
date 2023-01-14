@@ -38,7 +38,7 @@ bsoncxx::document::view DirectoryDao::GenerateViewForDirectory(const std::string
  * Generate directory object from view
  * @return a Directory object
 */
-Directory DirectoryDao::GenerateDirectoryFromView(const bsoncxx::document::view& view){
+Directory GenerateDirectoryFromView(const bsoncxx::document::view& view){
     Directory directory;
     directory.id = view["_id"].get_oid().value.to_string();
     directory.name = view["name"].get_string().value.to_string();
@@ -53,7 +53,7 @@ Directory DirectoryDao::GenerateDirectoryFromView(const bsoncxx::document::view&
  * @return an optional of Directory object
 */
 std::optional<std::vector<std::unique_ptr<Directory>>> DirectoryDao::GetAllByUserId(const std::string& user_id){
-    return GetAll<Directory, bsoncxx::oid, DirectoryDao>("_id", bsoncxx::oid(user_id), DirectoryDao::GenerateDirectoryFromView);
+    return GetAll("_id", bsoncxx::oid(user_id), GenerateDirectoryFromView);
 }
 
 /**
@@ -61,7 +61,7 @@ std::optional<std::vector<std::unique_ptr<Directory>>> DirectoryDao::GetAllByUse
  * @return an optional of Directory object
 */
 std::optional<std::vector<std::unique_ptr<Directory>>> DirectoryDao::GetAllByParentId(const std::string& parent_id){
-    return GetAll<Directory, bsoncxx::oid, DirectoryDao>("parent_id", bsoncxx::oid(parent_id), DirectoryDao::GenerateDirectoryFromView);
+    return GetAll("parent_id", bsoncxx::oid(parent_id), GenerateDirectoryFromView);
 }
 
 /**

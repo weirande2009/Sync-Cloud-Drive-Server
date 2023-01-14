@@ -1,10 +1,5 @@
 #include "service/transmission_service.h"
 
-
-TransmissionService::TransmissionService(){
-
-}
-
 /**
  * Get all transmissions by filemd5_id
  * @return a list of transmission objects

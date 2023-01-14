@@ -7,7 +7,7 @@ DIR_BIN = ./bin
 
 mongodb_header = /usr/local/include/mongocxx/v_noabi
 bson_header = /usr/local/include/bsoncxx/v_noabi
-LIBS = -lpthread -lbsoncxx -lmongocxx -lprotobuf
+LIBS = -lprotobuf -lpthread -lbsoncxx -lmongocxx
 
 DAO = dao
 PROTOBUF = protobuf
@@ -50,33 +50,33 @@ OBJ = $(DAO_OBJ) $(PROTOBUF_OBJ) $(SERVER_OBJ) $(SERVICE_OBJ) $(SIMPLE_SERVER_OB
 
 TARGET = main
 
-CFLAGS = -g -Wall -fdiagnostics-color=always -I${DIR_INC} -I${mongodb_header} -I${bson_header} $(LIBS) -L/usr/local/lib/ -std=c++17
+CFLAGS = -g -Wall -fdiagnostics-color=always -I${DIR_INC} -I${mongodb_header} -I${bson_header} -L/usr/local/lib/ $(LIBS) -std=c++17
 
 all:$(TARGET)
 
 $(TARGET):$(OBJ)
-	$(CC) $(CFLAGS) $^ -o $(TARGET)
+	$(CC) $^ $(CFLAGS) -o $(TARGET) 
 
 $(DAO_OBJ):%.o:$(DAO_DIR_SRC)/%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PROTOBUF_OBJ):%.o:$(PROTOBUF_DIR_SRC)/%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(SERVER_OBJ):%.o:$(SERVER_DIR_SRC)/%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(SERVICE_OBJ):%.o:$(SERVICE_DIR_SRC)/%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(SIMPLE_SERVER_OBJ):%.o:$(SIMPLE_SERVER_DIR_SRC)/%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(UTILITIES_OBJ):%.o:$(UTILITIES_DIR_SRC)/%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(MAIN_OBJ):%.o:%.cc
-	$(CC) $(CFLAGS) -M -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY:clean
 

@@ -23,14 +23,14 @@ bool FileMd5Dao::CreateFileMD5InDisk(const std::string& md5, int size, int slide
     std::vector<char> buf(SLIDE_SIZE, 0);
     for(int i=0; i<slide_num-1; i++){
         std::string file_path = folder_path + "/" + std::to_string(i);
-        if(!Database::GetInstance()->CreateEmptyFile(file_path, buf)){
+        if(!Database::GetInstance().CreateEmptyFile(file_path, buf)){
             return false;
         }
     }
     // create the file for the last slide
     std::string file_path = folder_path + "/" + std::to_string(slide_num-1);
     int last_slide_size = size - (slide_num-1)*SLIDE_SIZE;
-    if(!Database::GetInstance()->CreateEmptyFile(file_path, last_slide_size)){
+    if(!Database::GetInstance().CreateEmptyFile(file_path, last_slide_size)){
         return false;
     }
     return true;
@@ -73,7 +73,7 @@ bsoncxx::document::view FileMd5Dao::GenerateViewForFileMD5(const std::string& md
  * Generate file_md5 object from view
  * @return a FileMD5 object
 */
-FileMD5 FileMd5Dao::GenerateFileMD5FromView(const bsoncxx::v_noabi::document::view& view){
+FileMD5 GenerateFileMD5FromView(const bsoncxx::v_noabi::document::view& view){
     FileMD5 file_md5;
     file_md5.id = view["_id"].get_oid().value.to_string();
     file_md5.md5 = view["md5"].get_string().value.to_string();

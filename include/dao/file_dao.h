@@ -18,7 +18,6 @@ class FileDao: public Dao{
 private:
     bsoncxx::document::view GenerateViewForFile(const File& file);
     bsoncxx::document::view GenerateViewForFile(const std::string& user_id, const std::string& name, const std::string& directory_id, const std::string& md5);
-    File GenerateFileFromView(const bsoncxx::v_noabi::document::view& view);
 
 public:
     FileDao();
@@ -40,6 +39,8 @@ public:
     bool RemoveFile(const std::string& id);
 
 };
+
+File GenerateFileFromView(const bsoncxx::v_noabi::document::view& view);
 
 
 

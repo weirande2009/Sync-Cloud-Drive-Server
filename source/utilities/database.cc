@@ -1,9 +1,9 @@
 #include "utilities/database.h"
 
-Database* Database::GetInstance(){
-    if(instance == nullptr){
-        instance = new Database();
-    }
+Database& Database::GetInstance()
+{
+    static Database instance; // Guaranteed to be destroyed.
+                              // Instantiated on first use.
     return instance;
 }
 

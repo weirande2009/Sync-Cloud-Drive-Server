@@ -10,8 +10,6 @@ struct File{
     std::string md5;
     std::string user_id;
     int state;
-    File();
-    File(const std::string& id, const std::string& directory_id, const std::string& md5, const std::string& user_id);
 };
 
 

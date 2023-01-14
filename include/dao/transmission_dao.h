@@ -17,7 +17,6 @@ class TransmissionDao: public Dao{
 private:
     bsoncxx::document::view GenerateViewForTransmission(const Transmission& transmission);
     bsoncxx::document::view GenerateViewForTransmission(const std::string filemd5_id, int slide_no);
-    Transmission GenerateTransmissionFromView(const bsoncxx::v_noabi::document::view& view);
 
 public:
     TransmissionDao();
@@ -35,5 +34,6 @@ public:
     bool RemoveTransmission(const std::string& filemd5_id, int slide_no);
 };
 
+Transmission GenerateTransmissionFromView(const bsoncxx::v_noabi::document::view& view);
 
 #endif

@@ -17,7 +17,6 @@ class UserDao: public Dao{
 private:
     bsoncxx::document::view GenerateViewForUser(const User& user);
     bsoncxx::document::view GenerateViewForUser(const std::string& name, const std::string& password);
-    User GenerateUserFromView(const bsoncxx::document::view& view);
 
 public:
     UserDao();
@@ -33,4 +32,7 @@ public:
     bool AddUser(const std::string& name, const std::string& password);
 
 };
+
+User GenerateUserFromView(const bsoncxx::document::view& view);
+
 #endif

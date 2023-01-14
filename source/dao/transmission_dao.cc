@@ -34,7 +34,7 @@ bsoncxx::document::view TransmissionDao::GenerateViewForTransmission(const std::
  * Generate file_md5 object from view
  * @return a FileMD5 object
 */
-Transmission TransmissionDao::GenerateTransmissionFromView(const bsoncxx::v_noabi::document::view& view){
+Transmission GenerateTransmissionFromView(const bsoncxx::v_noabi::document::view& view){
     Transmission transmission;
     transmission.id = view["_id"].get_oid().value.to_string();
     transmission.filemd5_id = view["filemd5_id"].get_oid().value.to_string();

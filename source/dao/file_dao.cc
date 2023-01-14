@@ -39,7 +39,7 @@ bsoncxx::document::view FileDao::GenerateViewForFile(const std::string& user_id,
  * Generate file object from view
  * @return a File object
 */
-File FileDao::GenerateFileFromView(const bsoncxx::v_noabi::document::view& view){
+File GenerateFileFromView(const bsoncxx::v_noabi::document::view& view){
     File file;
     file.id = view["_id"].get_oid().value.to_string();
     file.name = view["name"].get_string().value.to_string();
@@ -55,7 +55,7 @@ File FileDao::GenerateFileFromView(const bsoncxx::v_noabi::document::view& view)
  * @return an optional of File object
 */
 std::optional<std::vector<std::unique_ptr<File>>> FileDao::GetAllByDirectoryId(const std::string& directory_id){
-    return GetAll("directory_id", bsoncxx::oid(directory_id), FileDao::GenerateFileFromView);
+    return GetAll("directory_id", bsoncxx::oid(directory_id), GenerateFileFromView);
 }
 
 /**
@@ -65,7 +65,7 @@ std::optional<std::vector<std::unique_ptr<File>>> FileDao::GetAllByDirectoryId(c
 std::optional<std::vector<std::unique_ptr<File>>> FileDao::GetAllFinishedByDirectoryId(const std::string& directory_id){
     std::vector<std::string> field_names = {"directory_id", "state"};
     FieldValues field_values = {bsoncxx::oid(directory_id), 1};
-    return GetAll(field_names, field_values, FileDao::GenerateFileFromView);
+    return GetAll(field_names, field_values, GenerateFileFromView);
 }
 
 /**
@@ -73,7 +73,7 @@ std::optional<std::vector<std::unique_ptr<File>>> FileDao::GetAllFinishedByDirec
  * @return an optional of File object
 */
 std::optional<std::vector<std::unique_ptr<File>>> FileDao::GetAllByUserId(const std::string& user_id){
-    return GetAll("user_id", bsoncxx::oid(user_id), FileDao::GenerateFileFromView);
+    return GetAll("user_id", bsoncxx::oid(user_id), GenerateFileFromView);
 }
 
 /**
@@ -83,7 +83,7 @@ std::optional<std::vector<std::unique_ptr<File>>> FileDao::GetAllByUserId(const 
 std::optional<std::unique_ptr<File>> FileDao::GetFile(const std::string& name, const std::string& directory_id, const std::string& md5){
     std::vector<std::string> field_names = {"name", "directory_id", "md5"};
     FieldValues field_values = {name, bsoncxx::oid(directory_id), md5};
-    return GetOne(field_names, field_values, FileDao::GenerateFileFromView);
+    return GetOne(field_names, field_values, GenerateFileFromView);
 }
 
 /**

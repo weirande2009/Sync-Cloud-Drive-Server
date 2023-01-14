@@ -10,8 +10,6 @@ struct FileMD5{
     int slide_num;
     int reference_num;
     int state;
-    FileMD5();
-    FileMD5(const std::string& id, const std::string& md5, int size, int slide_num, int reference_num, int state);
 };
 
 

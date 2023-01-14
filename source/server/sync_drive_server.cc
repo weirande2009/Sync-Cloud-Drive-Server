@@ -3,16 +3,16 @@
 
 SyncDriveServer::SyncDriveServer(int port): TcpServer("127.0.0.1", port){
     // bind process functions
-    process_function_pool.push_back(ProcessRegister);
-    process_function_pool.push_back(ProcessLogin);
-    process_function_pool.push_back(ProcessSync);
-    process_function_pool.push_back(ProcessUploadFile);
-    process_function_pool.push_back(ProcessDownLoad);
-    process_function_pool.push_back(ProcessUploadData);
-    process_function_pool.push_back(ProcessDeleteFile);
-    process_function_pool.push_back(ProcessAddDirectory);
-    process_function_pool.push_back(ProcessDeleteDirectory);
-    process_function_pool.push_back(ProcessModifyUser);
+    process_function_pool.push_back(&SyncDriveServer::ProcessRegister);
+    process_function_pool.push_back(&SyncDriveServer::ProcessLogin);
+    process_function_pool.push_back(&SyncDriveServer::ProcessSync);
+    process_function_pool.push_back(&SyncDriveServer::ProcessUploadFile);
+    process_function_pool.push_back(&SyncDriveServer::ProcessDownLoad);
+    process_function_pool.push_back(&SyncDriveServer::ProcessUploadData);
+    process_function_pool.push_back(&SyncDriveServer::ProcessDeleteFile);
+    process_function_pool.push_back(&SyncDriveServer::ProcessAddDirectory);
+    process_function_pool.push_back(&SyncDriveServer::ProcessDeleteDirectory);
+    process_function_pool.push_back(&SyncDriveServer::ProcessModifyUser);
     // client pool
     client_pool = std::make_unique<SyncDriveClientPool>();
     // bind receive and send callback functions
@@ -21,9 +21,9 @@ SyncDriveServer::SyncDriveServer(int port): TcpServer("127.0.0.1", port){
     OnRecv(std::bind(&SyncDriveServer::ProcessMessageCallback, this, std::placeholders::_1));
     OnSend(std::bind(&SyncDriveServer::SendMessageCallback, this, std::placeholders::_1));
     // start sender
-    sender = std::make_unique<std::thread>(SenderStart, this);
+    sender = std::make_unique<std::thread>(&SyncDriveServer::SenderStart, this);
     // start databse
-    Database::GetInstance()->Start(GetReactorNum());
+    Database::GetInstance().Start(GetReactorNum());
 }
 
 SyncDriveServer::~SyncDriveServer(){
@@ -446,6 +446,16 @@ int SyncDriveServer::AddSlideNoInTransmission(const std::string& filemd5_id, int
         // add the slide no. to it
         on_transmission_slides[filemd5_id].insert(slide_no);
     }
+    return 0;
+}
+
+bool SyncDriveServer::RemoveSlideNoInTransmission(const std::string& filemd5_id, int slide_no){
+    {
+        std::unique_lock<std::mutex> lock(on_transmission_mutex);
+        // add the slide no. to it
+        on_transmission_slides[filemd5_id].erase(slide_no);
+    }
+    return true;
 }
 
 int SyncDriveServer::GetNextSlideNoInTransmission(const std::string& filemd5_id){
@@ -499,3 +509,14 @@ std::string SyncDriveServer::GetProtobufString(const std::string& data){
     return protobuf;
 }
 
+core::v1::optional<bsoncxx::v_noabi::document::value> Dao::GetFieldValue(const std::vector<std::string>& field_names, const FieldValues& field_values, const std::string& target_field_name){
+    try
+    {
+        return collection.find_one(GenerateFilter(field_names, field_values).view(), GenerateFindOptions(target_field_name));
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    return {};
+}

@@ -26,7 +26,6 @@ public:
     };
 
 private:
-    static Database* instance;
     mongocxx::instance database_instance{}; // This should be done only once.
     mongocxx::pool client_pool{
         mongocxx::uri{
@@ -38,8 +37,9 @@ private:
     Database();
 
 public:
-
-    static Database* GetInstance();
+    Database(Database const&) = delete;
+    void operator=(Database const&) = delete;
+    static Database& GetInstance();
     void Start(int client_num);
     mongocxx::collection GetCollection(CollectionType collection_type);
     bool CreateEmptyFile(const std::string file_path, int size);

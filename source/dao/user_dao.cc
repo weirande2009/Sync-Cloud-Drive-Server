@@ -36,7 +36,7 @@ bsoncxx::document::view UserDao::GenerateViewForUser(const std::string& name, co
  * Generate a user object from view
  * @return a User object
 */
-User UserDao::GenerateUserFromView(const bsoncxx::document::view& view){
+User GenerateUserFromView(const bsoncxx::document::view& view){
     User user;
     user.id = view["_id"].get_oid().value.to_string();
     user.name = view["name"].get_string().value.to_string();
@@ -50,7 +50,7 @@ User UserDao::GenerateUserFromView(const bsoncxx::document::view& view){
  * @return an optional of User object
 */
 std::optional<std::unique_ptr<User>> UserDao::GetByName(const std::string& name){
-    return GetOne("name", name, UserDao::GenerateUserFromView);
+    return GetOne("name", name, GenerateUserFromView);
 }
 
 /**

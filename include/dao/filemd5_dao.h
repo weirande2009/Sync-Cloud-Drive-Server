@@ -24,7 +24,6 @@ private:
 
     bsoncxx::document::view GenerateViewForFileMD5(const FileMD5& file_md5);
     bsoncxx::document::view GenerateViewForFileMD5(const std::string& md5, int size, int slide_num);
-    FileMD5 GenerateFileMD5FromView(const bsoncxx::v_noabi::document::view& view);
 
     bool CreateFileMD5InDisk(const std::string& md5, int size, int slide_num);
 
@@ -46,6 +45,6 @@ public:
     bool UpdateState(const std::string& id, int state);
 };
 
-
+FileMD5 GenerateFileMD5FromView(const bsoncxx::v_noabi::document::view& view);
 
 #endif

@@ -17,7 +17,7 @@ class DirectoryDao: public Dao{
 private:
     bsoncxx::document::view GenerateViewForDirectory(const Directory& directory);
     bsoncxx::document::view GenerateViewForDirectory(const std::string& name, const std::string& parent_id, const std::string& user_id);
-    Directory GenerateDirectoryFromView(const bsoncxx::document::view& view);
+    
 
 public:
     DirectoryDao();
@@ -34,8 +34,10 @@ public:
     bool UpdateName(const std::string& id, const std::string& name);
     bool AddDirectory(const std::string& name, const std::string& parent_id, const std::string& user_id);
     bool RemoveDirectory(const std::string& id);
-
 };
+
+Directory GenerateDirectoryFromView(const bsoncxx::document::view& view);
+
 
 
 #endif
